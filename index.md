@@ -131,16 +131,29 @@ title: Jacopo Corrao
     scroll-margin-top: 80px;
   }
 
-  /* --- 5. SKILLS GRAPH (DESKTOP) --- */
-  .graph-container {
+  /* --- 5. SKILLS GRAPH --- */
+  .graph-wrapper {
     position: relative;
     width: 100%;
-    max-width: 900px;
-    height: 750px;
-    margin: 40px auto;
-    background: radial-gradient(circle at center, rgba(28,28,30,0.4) 0%, transparent 70%);
     border-radius: 30px;
-    /* overflow: hidden; Rimosso per permettere ai nodi di respirare su mobile */
+    overflow: hidden; /* Nasconde l'overflow del contenitore esterno */
+    background: radial-gradient(circle at center, rgba(28,28,30,0.4) 0%, transparent 70%);
+    margin: 40px auto;
+  }
+
+  /* Contenitore scrollabile */
+  .graph-scroll-area {
+    width: 100%;
+    height: 750px;
+    position: relative;
+    overflow: hidden; /* Default per desktop */
+  }
+
+  /* Contenuto interno a larghezza fissa per mantenere le proporzioni */
+  .graph-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
 
   .graph-lines {
@@ -158,7 +171,6 @@ title: Jacopo Corrao
     animation: flowPulse 3s linear infinite; opacity: 0.8;
   }
 
-  /* Flow Colors */
   .flow-blue   { stroke: var(--apple-blue); filter: drop-shadow(0 0 4px var(--apple-blue)); }
   .flow-green  { stroke: var(--flow-green); filter: drop-shadow(0 0 4px var(--flow-green)); }
   .flow-purple { stroke: var(--flow-purple); filter: drop-shadow(0 0 4px var(--flow-purple)); }
@@ -166,7 +178,6 @@ title: Jacopo Corrao
   .flow-cyan   { stroke: var(--flow-cyan); filter: drop-shadow(0 0 4px var(--flow-cyan)); }
   .flow-yellow { stroke: var(--flow-yellow); filter: drop-shadow(0 0 4px var(--flow-yellow)); }
 
-  /* Graph Nodes */
   .graph-node {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -202,6 +213,16 @@ title: Jacopo Corrao
   .node-orange:hover { border-color: var(--flow-orange); box-shadow: 0 0 15px var(--flow-orange); }
   .node-cyan:hover   { border-color: var(--flow-cyan); box-shadow: 0 0 15px var(--flow-cyan); }
   .node-yellow:hover { border-color: var(--flow-yellow); box-shadow: 0 0 15px var(--flow-yellow); }
+
+  /* Hint per scroll su mobile */
+  .mobile-scroll-hint {
+    display: none;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--apple-subtext);
+    margin-top: 10px;
+    opacity: 0.7;
+  }
 
   /* --- 6. CARDS & GRID --- */
   .grid {
@@ -325,7 +346,7 @@ title: Jacopo Corrao
     color: #555; font-size: 0.8rem;
   }
 
-  /* --- 9. MODAL --- */
+  /* --- 9. MODAL (FIXED FOR MOBILE) --- */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6);
@@ -333,14 +354,21 @@ title: Jacopo Corrao
     z-index: 1000;
     opacity: 0; visibility: hidden;
     transition: all 0.3s ease;
-    display: flex; justify-content: center; align-items: center; padding: 20px;
+    display: flex; justify-content: center; align-items: center; 
+    padding: 10px; /* Padding esterno minimo per mobile */
   }
   .modal-overlay.active { opacity: 1; visibility: visible; }
   
   .modal-content {
-    background: #1c1c1e; width: 100%; max-width: 700px; max-height: 85vh;
-    border-radius: 24px; border: 1px solid #333;
-    padding: 40px; position: relative; overflow-y: auto;
+    background: #1c1c1e; 
+    width: 95%; /* Più largo su mobile */
+    max-width: 700px; 
+    max-height: 80vh; /* Sicurezza per toolbar browser */
+    border-radius: 20px; 
+    border: 1px solid #333;
+    padding: 30px; /* Default desktop */
+    position: relative; 
+    overflow-y: auto;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -348,17 +376,26 @@ title: Jacopo Corrao
   .modal-overlay.active .modal-content { transform: scale(1); }
   
   .modal-close {
-    position: absolute; top: 20px; right: 20px;
-    background: rgba(255,255,255,0.1); border: none; color: #fff;
-    width: 36px; height: 36px; border-radius: 50%;
-    font-size: 1.2rem; cursor: pointer;
+    position: absolute; 
+    top: 15px; 
+    right: 15px;
+    background: rgba(255,255,255,0.1); 
+    border: none; color: #fff;
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 1.1rem; cursor: pointer;
     transition: background 0.2s;
     display: flex; align-items: center; justify-content: center;
+    z-index: 10;
   }
   .modal-close:hover { background: rgba(255,255,255,0.2); }
-  .modal-title { font-size: 2rem; font-weight: 700; margin: 0 0 10px 0; color: #fff; }
+  
+  .modal-title { 
+    font-size: 2rem; font-weight: 700; 
+    margin: 0 0 10px 0; color: #fff; 
+    padding-right: 40px; /* Evita sovrapposizione con la X */
+  }
   .modal-subtitle { font-size: 1.1rem; color: var(--apple-blue); margin-bottom: 25px; display: block; }
-  .modal-body { font-size: 1.1rem; line-height: 1.8; color: #ccc; }
+  .modal-body { font-size: 1.1rem; line-height: 1.7; color: #ccc; }
   .modal-body p { margin-bottom: 20px; }
   .btn-modal {
     display: inline-block; padding: 10px 24px;
@@ -378,68 +415,54 @@ title: Jacopo Corrao
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- 11. MOBILE OPTIMIZATIONS (FIX DEFINITIVO) --- */
+  /* --- 11. MOBILE OPTIMIZATIONS (FIX MODAL + GRAPH + LAYOUT) --- */
   @media (max-width: 768px) {
-    /* Navbar: Nome sopra, link scrollabili orizzontalmente sotto */
+    /* Navbar Scroll */
     .nav-header { flex-direction: column; align-items: flex-start; gap: 15px; }
     .nav-links { 
-      width: 100%; 
-      overflow-x: auto; 
-      padding-bottom: 10px; 
-      justify-content: flex-start; 
-      -webkit-overflow-scrolling: touch; 
+      width: 100%; overflow-x: auto; padding-bottom: 10px; 
+      justify-content: flex-start; -webkit-overflow-scrolling: touch; 
     }
     .nav-links::-webkit-scrollbar { display: none; }
 
-    /* Hero: Testo più piccolo */
-    #typing-text { font-size: 3rem; } /* Ridotto per stare in una riga */
-    .cursor { height: 3rem; }
+    /* Hero */
+    #typing-text { font-size: 2.5rem; }
+    .cursor { height: 2.5rem; }
     .hero p { font-size: 1.2rem; }
 
-    /* GRAFO SU MOBILE: Diventa una NUVOLA (Galaxy Layout) */
-    .graph-lines { display: none; } /* Nasconde le linee SVG */
-    .graph-container {
-      height: auto; /* Altezza automatica */
-      background: none; /* Rimuove sfondo scuro su mobile per pulizia */
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      padding: 20px 0;
+    /* GRAFO MOBILE: Scroll Orizzontale (Map View) */
+    .graph-scroll-area {
+      overflow-x: auto; /* Abilita lo scroll */
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      height: 600px; /* Ridotto altezza per mobile */
     }
-    .graph-node {
-      position: relative !important; /* Reset assoluto */
-      left: auto !important;
-      top: auto !important;
-      transform: none !important;
-      width: auto !important;
-      min-width: 90px;
-      height: 90px;
-      margin: 0;
-      /* Ripristina animazione galleggiamento stile bolla */
-      animation: float 6s ease-in-out infinite;
+    .graph-content {
+      width: 900px; /* Forza la larghezza desktop per mantenere la struttura */
+      transform: scale(0.8); /* Zoom out leggero per vedere di più */
+      transform-origin: top left;
     }
-    /* Differenzia le animazioni per non farle sembrare robotiche */
-    .graph-node:nth-child(2n) { animation-duration: 7s; }
-    .graph-node:nth-child(3n) { animation-duration: 5s; }
+    .mobile-scroll-hint { display: block; } /* Mostra hint */
 
-    /* Griglia: 1 colonna piena */
+    /* Griglia 1 colonna */
     .grid { grid-template-columns: 1fr; }
     
-    /* Footer Featured Card: Bottone dimensione giusta */
+    /* Footer Featured Card */
     .featured-card { padding: 25px; }
     .card-footer { flex-direction: column; align-items: flex-start; }
-    .btn-linkedin { width: auto; align-self: flex-start; } /* FIX: Non più full width */
+    .btn-linkedin { width: auto; } /* Fix bottone */
     
-    /* Riduzione spazi generali */
+    /* MODAL FIX SPECIFICO PER MOBILE */
+    .modal-content {
+      padding: 25px; /* Meno padding */
+      width: 90%;
+      border-radius: 16px;
+    }
+    .modal-title { font-size: 1.5rem; } /* Titolo più piccolo */
+    .modal-body { font-size: 1rem; } /* Testo più leggibile */
+    
     h2 { font-size: 1.8rem; margin-top: 60px; }
     .contact-section { padding: 40px 20px; }
-  }
-
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
   }
 </style>
 
@@ -478,77 +501,82 @@ title: Jacopo Corrao
 
   <section id="skills">
     <h2>Skills Graph</h2>
-    <div class="graph-container">
-      <svg class="graph-lines" width="100%" height="100%">
-        <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-base" />
-        <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-flow flow-blue" />
-        <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-base" />
-        <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-flow flow-blue" style="animation-delay: -1s" />
-        <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-base" />
-        <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-flow flow-blue" style="animation-delay: -0.5s" />
+    <p class="mobile-scroll-hint">← Scroll horizontally to explore →</p>
 
-        <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-base" />
-        <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-flow flow-blue" style="animation-duration: 4s;" />
+    <div class="graph-wrapper">
+      <div class="graph-scroll-area">
+        <div class="graph-content">
+          
+          <svg class="graph-lines" width="100%" height="100%">
+            <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-base" />
+            <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-flow flow-blue" />
+            <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-base" />
+            <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-flow flow-blue" style="animation-delay: -1s" />
+            <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-base" />
+            <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-flow flow-blue" style="animation-delay: -0.5s" />
+
+            <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-base" />
+            <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-flow flow-blue" style="animation-duration: 4s;" />
+            
+            <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-base" />
+            <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-flow flow-purple" />
+            <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-base" />
+            <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -0.5s" />
+            <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-base" />
+            <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-flow flow-purple" />
+            <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-base" />
+            <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-flow flow-purple" style="animation-delay: -1s" />
+            <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-base" />
+            <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -1.2s" />
+
+            <line x1="20%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
+            <line x1="65%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
+            <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-base" />
+            <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-flow flow-cyan" />
+
+            <line x1="35%" y1="70%" x2="60%" y2="75%" class="connection-base" />
+            <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-base" />
+            <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-flow flow-yellow" />
+
+            <line x1="20%" y1="30%" x2="35%" y2="70%" class="connection-base" style="opacity: 0.2" />
+            <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-base" />
+            <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-flow flow-green" />
+            <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-base" />
+            <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-flow flow-green" style="animation-delay: -1s" />
+            <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-base" />
+            <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-flow flow-green" style="animation-delay: -2s" />
+
+            <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-base" />
+            <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-flow flow-orange" style="animation-direction: alternate;" />
+          </svg>
+
+          <div class="graph-node node-lg node-blue" style="left: 20%; top: 30%;">Python</div>
+          <div class="graph-node node-md node-blue" style="left: 10%; top: 15%;">Machine<br>Learning</div>
+          <div class="graph-node node-md node-blue" style="left: 8%; top: 45%;">Data<br>Science</div>
+          <div class="graph-node node-md node-blue" style="left: 32%; top: 12%;">NLP</div>
+
+          <div class="graph-node node-lg node-purple" style="left: 45%; top: 30%;">C</div>
+          <div class="graph-node node-md node-purple" style="left: 50%; top: 10%;">Go</div>
+          <div class="graph-node node-lg node-purple" style="left: 65%; top: 30%;">Java</div>
+          <div class="graph-node node-md node-purple" style="left: 80%; top: 20%;">Kotlin</div>
+          <div class="graph-node node-sm node-purple" style="left: 90%; top: 10%;">Compose</div>
+          <div class="graph-node node-sm node-purple" style="left: 90%; top: 30%;">Flutter</div>
+
+          <div class="graph-node node-md node-cyan" style="left: 60%; top: 55%;">SQL</div>
+          <div class="graph-node node-md node-cyan" style="left: 75%; top: 50%;">Postgre<br>SQL</div>
+
+          <div class="graph-node node-md node-yellow" style="left: 60%; top: 75%;">Git</div>
+          <div class="graph-node node-sm node-yellow" style="left: 75%; top: 75%;">LaTeX</div>
+
+          <div class="graph-node node-lg node-green" style="left: 35%; top: 70%;">Linux</div>
+          <div class="graph-node node-sm node-green" style="left: 20%; top: 80%;">Debian</div>
+          <div class="graph-node node-md node-green" style="left: 45%; top: 85%;">Windows</div>
+          <div class="graph-node node-md node-green" style="left: 30%; top: 55%;">macOS</div>
+
+          <div class="graph-node node-sm node-orange" style="left: 83%; top: 92%;">English<br>(B2)</div>
+          <div class="graph-node node-sm node-orange" style="left: 94%; top: 85%;">Italian<br>(Native)</div>
         
-        <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-base" />
-        <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-flow flow-purple" />
-        <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-base" />
-        <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -0.5s" />
-        <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-base" />
-        <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-flow flow-purple" />
-        <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-base" />
-        <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-flow flow-purple" style="animation-delay: -1s" />
-        <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-base" />
-        <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -1.2s" />
-
-        <line x1="20%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
-        <line x1="65%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
-        <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-base" />
-        <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-flow flow-cyan" />
-
-        <line x1="35%" y1="70%" x2="60%" y2="75%" class="connection-base" />
-        <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-base" />
-        <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-flow flow-yellow" />
-
-        <line x1="20%" y1="30%" x2="35%" y2="70%" class="connection-base" style="opacity: 0.2" />
-        <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-base" />
-        <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-flow flow-green" />
-        <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-base" />
-        <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-flow flow-green" style="animation-delay: -1s" />
-        <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-base" />
-        <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-flow flow-green" style="animation-delay: -2s" />
-
-        <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-base" />
-        <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-flow flow-orange" style="animation-direction: alternate;" />
-      </svg>
-
-      <div class="graph-node node-lg node-blue" style="left: 20%; top: 30%;">Python</div>
-      <div class="graph-node node-md node-blue" style="left: 10%; top: 15%;">Machine<br>Learning</div>
-      <div class="graph-node node-md node-blue" style="left: 8%; top: 45%;">Data<br>Science</div>
-      <div class="graph-node node-md node-blue" style="left: 32%; top: 12%;">NLP</div>
-
-      <div class="graph-node node-lg node-purple" style="left: 45%; top: 30%;">C</div>
-      <div class="graph-node node-md node-purple" style="left: 50%; top: 10%;">Go</div>
-      <div class="graph-node node-lg node-purple" style="left: 65%; top: 30%;">Java</div>
-      <div class="graph-node node-md node-purple" style="left: 80%; top: 20%;">Kotlin</div>
-      <div class="graph-node node-sm node-purple" style="left: 90%; top: 10%;">Compose</div>
-      <div class="graph-node node-sm node-purple" style="left: 90%; top: 30%;">Flutter</div>
-
-      <div class="graph-node node-md node-cyan" style="left: 60%; top: 55%;">SQL</div>
-      <div class="graph-node node-md node-cyan" style="left: 75%; top: 50%;">Postgre<br>SQL</div>
-
-      <div class="graph-node node-md node-yellow" style="left: 60%; top: 75%;">Git</div>
-      <div class="graph-node node-sm node-yellow" style="left: 75%; top: 75%;">LaTeX</div>
-
-      <div class="graph-node node-lg node-green" style="left: 35%; top: 70%;">Linux</div>
-      <div class="graph-node node-sm node-green" style="left: 20%; top: 80%;">Debian</div>
-      <div class="graph-node node-md node-green" style="left: 45%; top: 85%;">Windows</div>
-      <div class="graph-node node-md node-green" style="left: 30%; top: 55%;">macOS</div>
-
-      <div class="graph-node node-sm node-orange" style="left: 83%; top: 92%;">English<br>(B2)</div>
-      <div class="graph-node node-sm node-orange" style="left: 94%; top: 85%;">Italian<br>(Native)</div>
-    </div>
-  </section>
+        </div> </div> </div> </section>
 
   <section id="featured">
     <h2>Featured Achievement</h2>
