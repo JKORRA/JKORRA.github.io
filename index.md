@@ -478,10 +478,6 @@ title: Jacopo Corrao
 
   <section id="skills">
     <h2>Skills Graph</h2>
-    <p style="text-align:center; color: var(--apple-subtext); margin-bottom: 20px;">
-      Interactive map of my technical ecosystem.
-    </p>
-
     <div class="graph-container">
       <svg class="graph-lines" width="100%" height="100%">
         <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-base" />
