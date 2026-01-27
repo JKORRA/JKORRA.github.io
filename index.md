@@ -495,8 +495,10 @@ title: Jacopo Corrao
   <section id="about">
     <h2>About Me</h2>
     <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
-      My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in Computer Science. Driven by a passion for data and innovation, I moved to <strong>Trento</strong> to pursue a Master's degree specializing in <strong>Data Science</strong>.
-    </p>
+      My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in <strong>Computer Science</strong>.<br>
+      Driven by the desire to gain new experiences, I decided to move to <strong>Trento</strong> to continue my studies.<br>
+      I am now attending a master's degree course in Computer Science, specialising in <strong>Data Science</strong>.
+   </p>
   </section>
 
   <section id="skills">
@@ -618,7 +620,7 @@ title: Jacopo Corrao
         <svg class="card-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
         <div style="flex-grow: 1;">
             <h3>Quadrifinder App</h3>
-            <p>Mobile application using AI Computer Vision to find four-leaf clovers.</p>
+            <p>Quadrifinder will help you find little green lucky charms with the help of Artificial Intelligence. Open the app, frame your favourite lawn and start searching for four-leaf clovers right away!</p>
         </div>
         <div class="card-footer">
             <div class="tech-stack">
@@ -644,7 +646,7 @@ title: Jacopo Corrao
         <svg class="card-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
         <div style="flex-grow: 1;">
             <h3>Climate Monitoring System</h3>
-            <p>Full-stack desktop system for climate centers with Clean Architecture.</p>
+            <p>Climate Monitoring is a desktop application that allows you to manage and consult climate monitoring centres.</p>
         </div>
         <div class="card-footer">
             <div class="tech-stack">
@@ -668,7 +670,7 @@ title: Jacopo Corrao
         <svg class="card-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
         <div style="flex-grow: 1;">
             <h3>Local LLM Agent</h3>
-            <p>Privacy-first GenAI tool for task automation and Function Calling.</p>
+            <p>Automation of tasks and improvement of the user experience through a system that uses GenerativeAI (LLM) on local hardware, leveraging Function Calling.</p>
         </div>
         <div class="card-footer">
             <div class="tech-stack">
@@ -678,8 +680,8 @@ title: Jacopo Corrao
             </div>
         </div>
         <div class="long-description">
-            <p>My undergraduate internship focused on the cutting edge of Generative AI: running Large Language Models (LLMs) locally.</p>
-            <p>The objective was to create an agent capable of <strong>Function Calling</strong>—interacting with external tools—without sending data to external cloud providers.</p>
+            <p>My undergraduate internship focused on the cutting edge of Generative AI:<br> running Large Language Models (LLMs) locally.</p>
+            <p>The objective was to create an agent capable of <strong>Function Calling</strong>, interacting with external tools, without sending data to external cloud providers.</p>
             <p>This project addressed key challenges in privacy, latency, and hardware constraints, demonstrating how GenAI can be effectively deployed in sensitive local environments.</p>
         </div>
         <a href="#" class="hidden-link"></a>
