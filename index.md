@@ -4,17 +4,17 @@ title: Jacopo Corrao
 ---
 
 <style>
-  /* 1. RESET & CORE VARIABLES */
+  /* --- 1. RESET E VARIABILI --- */
   header.site-header, footer.site-footer { display: none !important; }
   .wrapper { max-width: 100% !important; padding: 0 !important; }
 
   :root {
-    --bg-color: #000000;
-    --card-bg: #1c1c1e;
-    --text-primary: #f5f5f7;
-    --text-secondary: #86868b;
-    --accent-blue: #2997ff;
-    --border-color: #333333;
+    --apple-bg: #000000;
+    --apple-card: #1c1c1e;
+    --apple-text: #f5f5f7;
+    --apple-subtext: #86868b;
+    --apple-blue: #2997ff;
+    --apple-border: #333333;
     --btn-bg: rgba(255, 255, 255, 0.1);
     --btn-hover: rgba(41, 151, 255, 0.2);
     
@@ -26,21 +26,22 @@ title: Jacopo Corrao
     --flow-yellow: #ffcc00;
   }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
 
   body {
-    background-color: var(--bg-color);
-    color: var(--text-primary);
+    background-color: var(--apple-bg);
+    color: var(--apple-text);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  a { color: var(--accent-blue); text-decoration: none; transition: 0.2s; }
+  a { color: var(--apple-blue); text-decoration: none; transition: 0.2s; }
 
-  /* 2. LAYOUT & NAVIGATION */
+  /* --- 2. LAYOUT & NAVIGATION --- */
   .main-container {
     max-width: 980px;
     margin: 0 auto;
@@ -56,16 +57,21 @@ title: Jacopo Corrao
     position: relative;
     z-index: 100;
   }
-  .nav-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.5px; opacity: 0.9; color: #fff; }
+  .nav-name { font-weight: 600; font-size: 1.1rem; letter-spacing: -0.5px; opacity: 0.9; color: #fff; white-space: nowrap; }
   
   .nav-links { display: flex; gap: 20px; }
-  .nav-links a { font-size: 0.9rem; color: var(--text-secondary); transition: color 0.2s; }
+  .nav-links a { 
+    font-size: 0.9rem; 
+    color: var(--apple-subtext); 
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
   .nav-links a:hover { color: #fff; }
 
-  /* 3. HERO SECTION */
+  /* --- 3. HERO SECTION --- */
   .hero {
     text-align: center;
-    padding: 100px 20px 60px 20px;
+    padding: 80px 20px 40px 20px;
     min-height: 400px;
     display: flex;
     flex-direction: column;
@@ -80,13 +86,14 @@ title: Jacopo Corrao
     margin-bottom: 15px;
     color: #ffffff;
     display: inline-block;
+    line-height: 1.1;
   }
 
   .cursor {
     display: inline-block;
     width: 5px;
     height: 4rem;
-    background-color: var(--accent-blue);
+    background-color: var(--apple-blue);
     margin-left: 5px;
     vertical-align: text-bottom;
     animation: blink 1s infinite;
@@ -94,7 +101,7 @@ title: Jacopo Corrao
 
   .hero p {
     font-size: 1.6rem;
-    color: var(--text-secondary);
+    color: var(--apple-subtext);
     font-weight: 400;
     max-width: 720px;
     margin: 10px auto 40px auto;
@@ -109,23 +116,22 @@ title: Jacopo Corrao
     opacity: 0;
     animation: fadeIn 1s ease-in forwards, bounce 2s infinite;
     animation-delay: 2.5s, 2.5s;
-    color: var(--text-secondary);
+    color: var(--apple-subtext);
     cursor: pointer;
   }
-  .scroll-indicator:hover { color: #fff; }
 
-  /* 4. GENERAL SECTIONS */
+  /* --- 4. GENERAL SECTIONS --- */
   h2 {
     font-size: 2rem;
     font-weight: 600;
     letter-spacing: -0.5px;
-    margin-top: 100px;
+    margin-top: 80px;
     margin-bottom: 30px;
     color: #fff;
     scroll-margin-top: 80px;
   }
 
-  /* 5. SKILLS GRAPH (Galaxy) */
+  /* --- 5. SKILLS GRAPH (DESKTOP) --- */
   .graph-container {
     position: relative;
     width: 100%;
@@ -134,7 +140,7 @@ title: Jacopo Corrao
     margin: 40px auto;
     background: radial-gradient(circle at center, rgba(28,28,30,0.4) 0%, transparent 70%);
     border-radius: 30px;
-    overflow: hidden;
+    /* overflow: hidden; Rimosso per permettere ai nodi di respirare su mobile */
   }
 
   .graph-lines {
@@ -145,24 +151,15 @@ title: Jacopo Corrao
     pointer-events: none;
   }
 
-  .connection-base {
-    stroke: rgba(255, 255, 255, 0.08);
-    stroke-width: 2px;
-    fill: none;
-  }
-
+  .connection-base { stroke: rgba(255, 255, 255, 0.08); stroke-width: 2px; fill: none; }
   .connection-flow {
-    stroke-width: 2px;
-    fill: none;
-    stroke-linecap: round;
-    stroke-dasharray: 20 300; 
-    stroke-dashoffset: 320;
-    animation: flowPulse 3s linear infinite;
-    opacity: 0.8;
+    stroke-width: 2px; fill: none; stroke-linecap: round;
+    stroke-dasharray: 20 300; stroke-dashoffset: 320;
+    animation: flowPulse 3s linear infinite; opacity: 0.8;
   }
 
   /* Flow Colors */
-  .flow-blue   { stroke: var(--accent-blue); filter: drop-shadow(0 0 4px var(--accent-blue)); }
+  .flow-blue   { stroke: var(--apple-blue); filter: drop-shadow(0 0 4px var(--apple-blue)); }
   .flow-green  { stroke: var(--flow-green); filter: drop-shadow(0 0 4px var(--flow-green)); }
   .flow-purple { stroke: var(--flow-purple); filter: drop-shadow(0 0 4px var(--flow-purple)); }
   .flow-orange { stroke: var(--flow-orange); filter: drop-shadow(0 0 4px var(--flow-orange)); }
@@ -175,17 +172,13 @@ title: Jacopo Corrao
     transform: translate(-50%, -50%);
     z-index: 1;
     background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    color: var(--text-primary);
-    font-size: 0.85rem;
-    font-weight: 500;
+    color: var(--apple-text);
+    font-size: 0.85rem; font-weight: 500;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; justify-content: center; align-items: center;
     padding: 10px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -203,15 +196,14 @@ title: Jacopo Corrao
     z-index: 10;
   }
   
-  /* Node Glow Colors on Hover */
-  .node-blue:hover   { border-color: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); }
+  .node-blue:hover   { border-color: var(--apple-blue); box-shadow: 0 0 15px var(--apple-blue); }
   .node-green:hover  { border-color: var(--flow-green); box-shadow: 0 0 15px var(--flow-green); }
   .node-purple:hover { border-color: var(--flow-purple); box-shadow: 0 0 15px var(--flow-purple); }
   .node-orange:hover { border-color: var(--flow-orange); box-shadow: 0 0 15px var(--flow-orange); }
   .node-cyan:hover   { border-color: var(--flow-cyan); box-shadow: 0 0 15px var(--flow-cyan); }
   .node-yellow:hover { border-color: var(--flow-yellow); box-shadow: 0 0 15px var(--flow-yellow); }
 
-  /* 6. CARDS & GRID */
+  /* --- 6. CARDS & GRID --- */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -219,15 +211,13 @@ title: Jacopo Corrao
   }
   
   .card {
-    background-color: var(--card-bg);
+    background-color: var(--apple-card);
     border-radius: 20px;
     padding: 30px;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     border: 1px solid transparent;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-height: 250px;
+    display: flex; flex-direction: column;
+    position: relative; min-height: 250px;
   }
   .card.clickable { cursor: pointer; }
   
@@ -239,12 +229,12 @@ title: Jacopo Corrao
   }
   
   .card h3 { margin-top: 0; font-size: 1.4rem; font-weight: 600; margin-bottom: 10px; color: #fff; padding-right: 30px; }
-  .card p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 0; } 
+  .card p { color: var(--apple-subtext); font-size: 1rem; margin-bottom: 0; } 
 
   .featured-card {
     background: linear-gradient(145deg, #1c1c1e 0%, #161618 100%);
     border: 1px solid #333;
-    border-left: 4px solid var(--accent-blue);
+    border-left: 4px solid var(--apple-blue);
     border-radius: 20px;
     padding: 40px;
     margin-bottom: 40px;
@@ -253,10 +243,10 @@ title: Jacopo Corrao
   .featured-card:hover { transform: scale(1.01); border-color: #555; }
   .featured-header { margin-bottom: 15px; }
   .featured-title { font-size: 1.8rem; font-weight: 700; color: #fff; margin: 0; }
-  .featured-subtitle { color: var(--accent-blue); font-size: 1rem; font-weight: 600; margin-top: 5px; display: block; }
-  .featured-desc { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 20px; }
+  .featured-subtitle { color: var(--apple-blue); font-size: 1rem; font-weight: 600; margin-top: 5px; display: block; }
+  .featured-desc { font-size: 1.1rem; color: var(--apple-subtext); margin-bottom: 20px; }
 
-  /* 7. FOOTERS & ACTIONS */
+  /* --- 7. FOOTERS & ACTIONS --- */
   .card-footer {
     display: flex;
     justify-content: space-between;
@@ -275,7 +265,7 @@ title: Jacopo Corrao
     padding: 6px 12px;
     border-radius: 8px;
     background: rgba(41, 151, 255, 0.1);
-    color: var(--accent-blue);
+    color: var(--apple-blue);
     font-weight: 600;
     border: 1px solid rgba(41, 151, 255, 0.2);
   }
@@ -288,7 +278,7 @@ title: Jacopo Corrao
     transition: all 0.3s ease;
     opacity: 0.5;
   }
-  .card:hover .card-expand-icon { color: var(--accent-blue); opacity: 1; transform: translate(2px, -2px); }
+  .card:hover .card-expand-icon { color: var(--apple-blue); opacity: 1; transform: translate(2px, -2px); }
 
   .btn-linkedin {
     display: inline-flex; align-items: center; gap: 8px;
@@ -307,7 +297,7 @@ title: Jacopo Corrao
     transform: translateY(-2px);
   }
 
-  /* 8. CONTACT & FOOTER */
+  /* --- 8. CONTACT & FOOTER --- */
   .contact-section {
     text-align: center;
     padding: 80px 20px;
@@ -320,13 +310,13 @@ title: Jacopo Corrao
     display: inline-block; margin-top: 20px;
     padding: 12px 30px; border-radius: 980px;
     font-size: 1rem; font-weight: 600;
-    background-color: var(--accent-blue); color: #000;
+    background-color: var(--apple-blue); color: #000;
     transition: transform 0.2s;
   }
   .btn-contact:hover { transform: scale(1.05); background-color: #fff; text-decoration: none; color: #000; }
   
   .social-links { margin-top: 30px; display: flex; justify-content: center; gap: 20px; }
-  .social-link { color: var(--text-secondary); transition: color 0.2s; }
+  .social-link { color: var(--apple-subtext); transition: color 0.2s; }
   .social-link:hover { color: #fff; }
 
   footer {
@@ -335,7 +325,7 @@ title: Jacopo Corrao
     color: #555; font-size: 0.8rem;
   }
 
-  /* 9. MODAL */
+  /* --- 9. MODAL --- */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6);
@@ -367,18 +357,18 @@ title: Jacopo Corrao
   }
   .modal-close:hover { background: rgba(255,255,255,0.2); }
   .modal-title { font-size: 2rem; font-weight: 700; margin: 0 0 10px 0; color: #fff; }
-  .modal-subtitle { font-size: 1.1rem; color: var(--accent-blue); margin-bottom: 25px; display: block; }
+  .modal-subtitle { font-size: 1.1rem; color: var(--apple-blue); margin-bottom: 25px; display: block; }
   .modal-body { font-size: 1.1rem; line-height: 1.8; color: #ccc; }
   .modal-body p { margin-bottom: 20px; }
   .btn-modal {
     display: inline-block; padding: 10px 24px;
-    border-radius: 980px; background: var(--accent-blue);
+    border-radius: 980px; background: var(--apple-blue);
     color: #000; font-weight: 600; margin-top: 10px;
   }
   .btn-modal:hover { background: #fff; color: #000; text-decoration: none; }
   .long-description, .hidden-link { display: none; }
 
-  /* 10. ANIMATIONS & MEDIA QUERIES */
+  /* --- 10. ANIMATIONS --- */
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
   @keyframes flowPulse { to { stroke-dashoffset: 0; } }
   @keyframes bounce {
@@ -388,14 +378,68 @@ title: Jacopo Corrao
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  @media (max-width: 600px) {
-    #typing-text { font-size: 2.5rem; }
-    .cursor { height: 2.5rem; }
+  /* --- 11. MOBILE OPTIMIZATIONS (FIX DEFINITIVO) --- */
+  @media (max-width: 768px) {
+    /* Navbar: Nome sopra, link scrollabili orizzontalmente sotto */
+    .nav-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .nav-links { 
+      width: 100%; 
+      overflow-x: auto; 
+      padding-bottom: 10px; 
+      justify-content: flex-start; 
+      -webkit-overflow-scrolling: touch; 
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+
+    /* Hero: Testo più piccolo */
+    #typing-text { font-size: 3rem; } /* Ridotto per stare in una riga */
+    .cursor { height: 3rem; }
+    .hero p { font-size: 1.2rem; }
+
+    /* GRAFO SU MOBILE: Diventa una NUVOLA (Galaxy Layout) */
+    .graph-lines { display: none; } /* Nasconde le linee SVG */
+    .graph-container {
+      height: auto; /* Altezza automatica */
+      background: none; /* Rimuove sfondo scuro su mobile per pulizia */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px 0;
+    }
+    .graph-node {
+      position: relative !important; /* Reset assoluto */
+      left: auto !important;
+      top: auto !important;
+      transform: none !important;
+      width: auto !important;
+      min-width: 90px;
+      height: 90px;
+      margin: 0;
+      /* Ripristina animazione galleggiamento stile bolla */
+      animation: float 6s ease-in-out infinite;
+    }
+    /* Differenzia le animazioni per non farle sembrare robotiche */
+    .graph-node:nth-child(2n) { animation-duration: 7s; }
+    .graph-node:nth-child(3n) { animation-duration: 5s; }
+
+    /* Griglia: 1 colonna piena */
+    .grid { grid-template-columns: 1fr; }
+    
+    /* Footer Featured Card: Bottone dimensione giusta */
     .featured-card { padding: 25px; }
-    .nav-links { display: none; } 
     .card-footer { flex-direction: column; align-items: flex-start; }
-    .btn-linkedin { width: 100%; justify-content: center; }
-    .graph-container { height: 600px; transform: scale(0.65); transform-origin: top center; width: 140%; margin-left: -20%; }
+    .btn-linkedin { width: auto; align-self: flex-start; } /* FIX: Non più full width */
+    
+    /* Riduzione spazi generali */
+    h2 { font-size: 1.8rem; margin-top: 60px; }
+    .contact-section { padding: 40px 20px; }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
   }
 </style>
 
@@ -427,13 +471,17 @@ title: Jacopo Corrao
 
   <section id="about">
     <h2>About Me</h2>
-    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
+    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
       My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in Computer Science. Driven by a passion for data and innovation, I moved to <strong>Trento</strong> to pursue a Master's degree specializing in <strong>Data Science</strong>.
     </p>
   </section>
 
   <section id="skills">
     <h2>Skills Graph</h2>
+    <p style="text-align:center; color: var(--apple-subtext); margin-bottom: 20px;">
+      Interactive map of my technical ecosystem.
+    </p>
+
     <div class="graph-container">
       <svg class="graph-lines" width="100%" height="100%">
         <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-base" />
@@ -516,7 +564,7 @@ title: Jacopo Corrao
       <p class="featured-desc">
         Selected to participate in an Open Innovation initiative by HIT (Hub Innovazione Trentino). I worked in a team to innovate educational processes using AI.
       </p>
-      <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.8;">
+      <ul style="color: var(--apple-subtext); padding-left: 20px; line-height: 1.8;">
         <li><strong>Challenge:</strong> Personalize training pathways for public sector employees using unstructured data.</li>
         <li><strong>Solution:</strong> Developed a hybrid recommender system leveraging the <strong>ESCO taxonomy</strong>, text embeddings, and FAISS.</li>
         <li><strong>Outcome:</strong> Delivered a functional Proof of Concept (PoC) API for semantic search and personalized course suggestions.</li>
@@ -619,7 +667,7 @@ title: Jacopo Corrao
     <h2>Education Path</h2>
     <div class="grid">
       <div class="card" style="background: rgba(28,28,30,0.6); cursor: default;">
-        <span style="color: var(--accent-blue); font-weight:bold; font-size: 0.8rem; text-transform: uppercase;">Current • Since Sep 2024</span>
+        <span style="color: var(--apple-blue); font-weight:bold; font-size: 0.8rem; text-transform: uppercase;">Current • Since Sep 2024</span>
         <h3 style="margin-top: 10px;">University of Trento</h3>
         <p>Master in Computer Science<br><strong>Path: Data Science</strong></p>
       </div>
@@ -634,7 +682,7 @@ title: Jacopo Corrao
   <section id="contact">
     <div class="contact-section">
         <h2 style="margin-top: 0; margin-bottom: 15px; color:white;">Let's Connect</h2>
-        <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 30px auto;">
+        <p style="color: var(--apple-subtext); max-width: 500px; margin: 0 auto 30px auto;">
             I am always open to discussing new opportunities in Machine Learning and Data Science.
         </p>
         <a href="mailto:jacopo.corrao@gmail.com" class="btn-contact">Send an Email</a>
@@ -646,7 +694,7 @@ title: Jacopo Corrao
   </section>
 
   <footer>
-    <p>Jacopo Corrao • Portfolio 2026</p>
+    <p>Jacopo Corrao • Portfolio 2025</p>
     <p style="opacity: 0.4; margin-top: 10px;"><3</p>
   </footer>
 
