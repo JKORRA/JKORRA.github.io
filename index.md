@@ -14,16 +14,14 @@ title: Jacopo Corrao
     --apple-text: #f5f5f7;
     --apple-subtext: #86868b;
     --apple-blue: #2997ff;
-    --apple-border: #333333;
-    --btn-bg: rgba(255, 255, 255, 0.1);
-    --btn-hover: rgba(41, 151, 255, 0.2);
     
-    /* Graph Colors */
-    --flow-green: #30d158;
-    --flow-purple: #bf5af2;
-    --flow-orange: #ff9f0a;
-    --flow-cyan: #64d2ff;
-    --flow-yellow: #ffcc00;
+    /* Neon Colors */
+    --neon-blue: #0A84FF;
+    --neon-purple: #BF5AF2;
+    --neon-cyan: #64D2FF;
+    --neon-green: #30D158;
+    --neon-yellow: #FFD60A;
+    --neon-orange: #FF9F0A;
   }
 
   html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -36,7 +34,8 @@ title: Jacopo Corrao
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Previene scroll orizzontale della pagina intera */
+    width: 100%;
   }
 
   a { color: var(--apple-blue); text-decoration: none; transition: 0.2s; }
@@ -131,97 +130,103 @@ title: Jacopo Corrao
     scroll-margin-top: 80px;
   }
 
-  /* --- 5. SKILLS GRAPH --- */
+  /* --- 5. SKILLS GRAPH (SCROLLABLE WINDOW) --- */
   .graph-wrapper {
     position: relative;
     width: 100%;
-    border-radius: 30px;
-    overflow: hidden; /* Nasconde l'overflow del contenitore esterno */
-    background: radial-gradient(circle at center, rgba(28,28,30,0.4) 0%, transparent 70%);
-    margin: 40px auto;
+    height: 700px; /* Default Desktop Height */
+    background: transparent;
+    margin: 0 auto;
+    overflow: hidden; /* Su desktop niente scroll */
+    border-radius: 20px; /* Leggero bordo per definire l'area */
   }
 
-  /* Contenitore scrollabile */
-  .graph-scroll-area {
-    width: 100%;
-    height: 750px;
-    position: relative;
-    overflow: hidden; /* Default per desktop */
-  }
-
-  /* Contenuto interno a larghezza fissa per mantenere le proporzioni */
-  .graph-content {
+  #d3-graph-container {
     width: 100%;
     height: 100%;
-    position: relative;
+    cursor: grab;
   }
+  #d3-graph-container:active { cursor: grabbing; }
 
-  .graph-lines {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  .connection-base { stroke: rgba(255, 255, 255, 0.08); stroke-width: 2px; fill: none; }
-  .connection-flow {
-    stroke-width: 2px; fill: none; stroke-linecap: round;
-    stroke-dasharray: 20 300; stroke-dashoffset: 320;
-    animation: flowPulse 3s linear infinite; opacity: 0.8;
-  }
-
-  .flow-blue   { stroke: var(--apple-blue); filter: drop-shadow(0 0 4px var(--apple-blue)); }
-  .flow-green  { stroke: var(--flow-green); filter: drop-shadow(0 0 4px var(--flow-green)); }
-  .flow-purple { stroke: var(--flow-purple); filter: drop-shadow(0 0 4px var(--flow-purple)); }
-  .flow-orange { stroke: var(--flow-orange); filter: drop-shadow(0 0 4px var(--flow-orange)); }
-  .flow-cyan   { stroke: var(--flow-cyan); filter: drop-shadow(0 0 4px var(--flow-cyan)); }
-  .flow-yellow { stroke: var(--flow-yellow); filter: drop-shadow(0 0 4px var(--flow-yellow)); }
-
-  .graph-node {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    color: var(--apple-text);
-    font-size: 0.85rem; font-weight: 500;
-    text-align: center;
-    display: flex; justify-content: center; align-items: center;
-    padding: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    cursor: default;
-  }
-
-  .node-lg { width: 100px; height: 100px; font-size: 1rem; font-weight: 600; }
-  .node-md { width: 85px; height: 85px; }
-  .node-sm { width: 65px; height: 65px; font-size: 0.75rem; }
-
-  .graph-node:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
-    transform: translate(-50%, -50%) scale(1.1);
-    z-index: 10;
-  }
-  
-  .node-blue:hover   { border-color: var(--apple-blue); box-shadow: 0 0 15px var(--apple-blue); }
-  .node-green:hover  { border-color: var(--flow-green); box-shadow: 0 0 15px var(--flow-green); }
-  .node-purple:hover { border-color: var(--flow-purple); box-shadow: 0 0 15px var(--flow-purple); }
-  .node-orange:hover { border-color: var(--flow-orange); box-shadow: 0 0 15px var(--flow-orange); }
-  .node-cyan:hover   { border-color: var(--flow-cyan); box-shadow: 0 0 15px var(--flow-cyan); }
-  .node-yellow:hover { border-color: var(--flow-yellow); box-shadow: 0 0 15px var(--flow-yellow); }
-
-  /* Hint per scroll su mobile */
+  /* Hint per scroll su mobile (nascosto su desktop) */
   .mobile-scroll-hint {
     display: none;
     text-align: center;
-    font-size: 0.8rem;
     color: var(--apple-subtext);
-    margin-top: 10px;
-    opacity: 0.7;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    animation: fadeIn 2s;
+  }
+
+  /* LINEE */
+  .link-base {
+    stroke: #333;
+    stroke-width: 2px;
+    stroke-opacity: 0.4; 
+  }
+
+  .link-flow {
+    fill: none;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-dasharray: 6 10;
+    animation: flowAnimation 2s linear infinite;
+    stroke-opacity: 0.8;
+  }
+
+  @keyframes flowAnimation {
+    from { stroke-dashoffset: 32; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* NODI */
+  .node circle {
+    fill: #2c2c2e;
+    stroke-width: 2px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .node text {
+    font-family: -apple-system, "SF Pro Text", sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    font-weight: 600;
+    fill: #ffffff;
+    font-size: 13px;
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+
+  /* --- INTERAZIONE (Desktop Hover / Mobile Click) --- */
+  
+  /* Stato "Focus Mode": scurisce tutto ciò che non è attivo */
+  .graph-wrapper.has-active .node:not(.active):not(.neighbor) circle { opacity: 0.3; }
+  .graph-wrapper.has-active .node:not(.active):not(.neighbor) text { opacity: 0.3; }
+  .graph-wrapper.has-active .link-base { opacity: 0.1; }
+  .graph-wrapper.has-active .link-flow { opacity: 0.1; }
+
+  /* NODO ATTIVO */
+  .node.active circle, .node:hover circle {
+    opacity: 1 !important;
+    fill: #1c1c1e;
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 15px currentColor);
+    transform: scale(1.1);
+  }
+
+  /* LINK ATTIVI */
+  .link-flow.active {
+    opacity: 1 !important;
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 5px currentColor);
+    animation-duration: 0.5s;
+  }
+  
+  /* VICINI */
+  .node.neighbor circle {
+    opacity: 1 !important;
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 5px currentColor);
   }
 
   /* --- 6. CARDS & GRID --- */
@@ -267,7 +272,7 @@ title: Jacopo Corrao
   .featured-subtitle { color: var(--apple-blue); font-size: 1rem; font-weight: 600; margin-top: 5px; display: block; }
   .featured-desc { font-size: 1.1rem; color: var(--apple-subtext); margin-bottom: 20px; }
 
-  /* --- 7. FOOTERS & ACTIONS --- */
+  /* --- 7. FOOTERS --- */
   .card-footer {
     display: flex;
     justify-content: space-between;
@@ -318,7 +323,7 @@ title: Jacopo Corrao
     transform: translateY(-2px);
   }
 
-  /* --- 8. CONTACT & FOOTER --- */
+  /* --- 8. CONTACT --- */
   .contact-section {
     text-align: center;
     padding: 80px 20px;
@@ -346,7 +351,7 @@ title: Jacopo Corrao
     color: #555; font-size: 0.8rem;
   }
 
-  /* --- 9. MODAL (FIXED FOR MOBILE) --- */
+  /* --- 9. MODAL --- */
   .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6);
@@ -355,20 +360,15 @@ title: Jacopo Corrao
     opacity: 0; visibility: hidden;
     transition: all 0.3s ease;
     display: flex; justify-content: center; align-items: center; 
-    padding: 10px; /* Padding esterno minimo per mobile */
+    padding: 10px; 
   }
   .modal-overlay.active { opacity: 1; visibility: visible; }
   
   .modal-content {
     background: #1c1c1e; 
-    width: 95%; /* Più largo su mobile */
-    max-width: 700px; 
-    max-height: 80vh; /* Sicurezza per toolbar browser */
-    border-radius: 20px; 
-    border: 1px solid #333;
-    padding: 30px; /* Default desktop */
-    position: relative; 
-    overflow-y: auto;
+    width: 95%; max-width: 700px; max-height: 80vh; 
+    border-radius: 20px; border: 1px solid #333;
+    padding: 30px; position: relative; overflow-y: auto;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -376,24 +376,16 @@ title: Jacopo Corrao
   .modal-overlay.active .modal-content { transform: scale(1); }
   
   .modal-close {
-    position: absolute; 
-    top: 15px; 
-    right: 15px;
-    background: rgba(255,255,255,0.1); 
-    border: none; color: #fff;
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(255,255,255,0.1); border: none; color: #fff;
     width: 32px; height: 32px; border-radius: 50%;
     font-size: 1.1rem; cursor: pointer;
     transition: background 0.2s;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 10;
+    display: flex; align-items: center; justify-content: center; z-index: 10;
   }
   .modal-close:hover { background: rgba(255,255,255,0.2); }
   
-  .modal-title { 
-    font-size: 2rem; font-weight: 700; 
-    margin: 0 0 10px 0; color: #fff; 
-    padding-right: 40px; /* Evita sovrapposizione con la X */
-  }
+  .modal-title { font-size: 2rem; font-weight: 700; margin: 0 0 10px 0; color: #fff; padding-right: 40px; }
   .modal-subtitle { font-size: 1.1rem; color: var(--apple-blue); margin-bottom: 25px; display: block; }
   .modal-body { font-size: 1.1rem; line-height: 1.7; color: #ccc; }
   .modal-body p { margin-bottom: 20px; }
@@ -407,7 +399,6 @@ title: Jacopo Corrao
 
   /* --- 10. ANIMATIONS --- */
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-  @keyframes flowPulse { to { stroke-dashoffset: 0; } }
   @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
     40% {transform: translateY(-10px);}
@@ -415,54 +406,40 @@ title: Jacopo Corrao
   }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* --- 11. MOBILE OPTIMIZATIONS (FIX MODAL + GRAPH + LAYOUT) --- */
+  /* --- 11. MOBILE OPTIMIZATIONS (FIXED GRAFO) --- */
   @media (max-width: 768px) {
-    /* Navbar Scroll */
     .nav-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-    .nav-links { 
-      width: 100%; overflow-x: auto; padding-bottom: 10px; 
-      justify-content: flex-start; -webkit-overflow-scrolling: touch; 
-    }
+    .nav-links { width: 100%; overflow-x: auto; padding-bottom: 10px; justify-content: flex-start; }
     .nav-links::-webkit-scrollbar { display: none; }
-
-    /* Hero */
     #typing-text { font-size: 2.5rem; }
     .cursor { height: 2.5rem; }
     .hero p { font-size: 1.2rem; }
-
-    /* GRAFO MOBILE: Scroll Orizzontale (Map View) */
-    .graph-scroll-area {
-      overflow-x: auto; /* Abilita lo scroll */
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      height: 600px; /* Ridotto altezza per mobile */
-    }
-    .graph-content {
-      width: 900px; /* Forza la larghezza desktop per mantenere la struttura */
-      transform: scale(0.8); /* Zoom out leggero per vedere di più */
-      transform-origin: top left;
-    }
-    .mobile-scroll-hint { display: block; } /* Mostra hint */
-
-    /* Griglia 1 colonna */
     .grid { grid-template-columns: 1fr; }
-    
-    /* Footer Featured Card */
     .featured-card { padding: 25px; }
     .card-footer { flex-direction: column; align-items: flex-start; }
-    .btn-linkedin { width: auto; } /* Fix bottone */
-    
-    /* MODAL FIX SPECIFICO PER MOBILE */
-    .modal-content {
-      padding: 25px; /* Meno padding */
-      width: 90%;
-      border-radius: 16px;
-    }
-    .modal-title { font-size: 1.5rem; } /* Titolo più piccolo */
-    .modal-body { font-size: 1rem; } /* Testo più leggibile */
-    
+    .btn-linkedin { width: auto; }
+    .modal-content { padding: 25px; width: 90%; border-radius: 16px; }
+    .modal-title { font-size: 1.5rem; } 
+    .modal-body { font-size: 1rem; } 
     h2 { font-size: 1.8rem; margin-top: 60px; }
     .contact-section { padding: 40px 20px; }
+    
+    /* --- FIX DEFINITIVO GRAFO MOBILE --- */
+    .mobile-scroll-hint { display: block; } /* Mostra l'avviso di scroll */
+    
+    .graph-wrapper { 
+        height: 500px; /* Ridotto altezza solo per mobile */
+        overflow-x: auto; /* Permette scroll orizzontale */
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
+        border: 1px solid #333;
+    }
+    
+    /* Questo forza il contenitore D3 ad essere LUNGO, creando lo scroll */
+    #d3-graph-container {
+        min-width: 900px; /* <--- TRUCCO: Il grafo si crede su desktop */
+        height: 100%;
+    }
   }
 </style>
 
@@ -504,81 +481,10 @@ title: Jacopo Corrao
   <section id="skills">
     <h2>Skills Graph</h2>
     <p class="mobile-scroll-hint">← Scroll horizontally to explore →</p>
-
     <div class="graph-wrapper">
-      <div class="graph-scroll-area">
-        <div class="graph-content">
-          
-          <svg class="graph-lines" width="100%" height="100%">
-            <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-base" />
-            <line x1="20%" y1="30%" x2="10%" y2="15%" class="connection-flow flow-blue" />
-            <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-base" />
-            <line x1="20%" y1="30%" x2="8%" y2="45%" class="connection-flow flow-blue" style="animation-delay: -1s" />
-            <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-base" />
-            <line x1="20%" y1="30%" x2="32%" y2="12%" class="connection-flow flow-blue" style="animation-delay: -0.5s" />
-
-            <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-base" />
-            <line x1="20%" y1="30%" x2="45%" y2="30%" class="connection-flow flow-blue" style="animation-duration: 4s;" />
-            
-            <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-base" />
-            <line x1="45%" y1="30%" x2="50%" y2="10%" class="connection-flow flow-purple" />
-            <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-base" />
-            <line x1="45%" y1="30%" x2="65%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -0.5s" />
-            <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-base" />
-            <line x1="65%" y1="30%" x2="80%" y2="20%" class="connection-flow flow-purple" />
-            <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-base" />
-            <line x1="80%" y1="20%" x2="90%" y2="10%" class="connection-flow flow-purple" style="animation-delay: -1s" />
-            <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-base" />
-            <line x1="80%" y1="20%" x2="90%" y2="30%" class="connection-flow flow-purple" style="animation-delay: -1.2s" />
-
-            <line x1="20%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
-            <line x1="65%" y1="30%" x2="60%" y2="55%" class="connection-base" style="opacity: 0.2" />
-            <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-base" />
-            <line x1="60%" y1="55%" x2="75%" y2="50%" class="connection-flow flow-cyan" />
-
-            <line x1="35%" y1="70%" x2="60%" y2="75%" class="connection-base" />
-            <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-base" />
-            <line x1="60%" y1="75%" x2="75%" y2="75%" class="connection-flow flow-yellow" />
-
-            <line x1="20%" y1="30%" x2="35%" y2="70%" class="connection-base" style="opacity: 0.2" />
-            <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-base" />
-            <line x1="35%" y1="70%" x2="20%" y2="80%" class="connection-flow flow-green" />
-            <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-base" />
-            <line x1="35%" y1="70%" x2="45%" y2="85%" class="connection-flow flow-green" style="animation-delay: -1s" />
-            <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-base" />
-            <line x1="35%" y1="70%" x2="30%" y2="55%" class="connection-flow flow-green" style="animation-delay: -2s" />
-
-            <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-base" />
-            <line x1="94%" y1="85%" x2="83%" y2="92%" class="connection-flow flow-orange" style="animation-direction: alternate;" />
-          </svg>
-
-          <div class="graph-node node-lg node-blue" style="left: 20%; top: 30%;">Python</div>
-          <div class="graph-node node-md node-blue" style="left: 10%; top: 15%;">Machine<br>Learning</div>
-          <div class="graph-node node-md node-blue" style="left: 8%; top: 45%;">Data<br>Science</div>
-          <div class="graph-node node-md node-blue" style="left: 32%; top: 12%;">NLP</div>
-
-          <div class="graph-node node-lg node-purple" style="left: 45%; top: 30%;">C</div>
-          <div class="graph-node node-md node-purple" style="left: 50%; top: 10%;">Go</div>
-          <div class="graph-node node-lg node-purple" style="left: 65%; top: 30%;">Java</div>
-          <div class="graph-node node-md node-purple" style="left: 80%; top: 20%;">Kotlin</div>
-          <div class="graph-node node-sm node-purple" style="left: 90%; top: 10%;">Compose</div>
-          <div class="graph-node node-sm node-purple" style="left: 90%; top: 30%;">Flutter</div>
-
-          <div class="graph-node node-md node-cyan" style="left: 60%; top: 55%;">SQL</div>
-          <div class="graph-node node-md node-cyan" style="left: 75%; top: 50%;">Postgre<br>SQL</div>
-
-          <div class="graph-node node-md node-yellow" style="left: 60%; top: 75%;">Git</div>
-          <div class="graph-node node-sm node-yellow" style="left: 75%; top: 75%;">LaTeX</div>
-
-          <div class="graph-node node-lg node-green" style="left: 35%; top: 70%;">Linux</div>
-          <div class="graph-node node-sm node-green" style="left: 20%; top: 80%;">Debian</div>
-          <div class="graph-node node-md node-green" style="left: 45%; top: 85%;">Windows</div>
-          <div class="graph-node node-md node-green" style="left: 30%; top: 55%;">macOS</div>
-
-          <div class="graph-node node-sm node-orange" style="left: 83%; top: 92%;">English<br>(B2)</div>
-          <div class="graph-node node-sm node-orange" style="left: 94%; top: 85%;">Italian<br>(Native)</div>
-        
-        </div> </div> </div> </section>
+      <div id="d3-graph-container"></div>
+    </div>
+  </section>
 
   <section id="featured">
     <h2>Featured Achievement</h2>
@@ -709,7 +615,7 @@ title: Jacopo Corrao
     <div class="contact-section">
         <h2 style="margin-top: 0; margin-bottom: 15px; color:white;">Let's Connect</h2>
         <p style="color: var(--apple-subtext); max-width: 500px; margin: 0 auto 30px auto;">
-            I am always open to discussing new opportunities in Machine Learning and Data Science.
+            I am always open to new opportunities!
         </p>
         <a href="mailto:jacopo.corrao@gmail.com" class="btn-contact">Send an Email</a>
         <div class="social-links">
@@ -720,7 +626,7 @@ title: Jacopo Corrao
   </section>
 
   <footer>
-    <p>Jacopo Corrao • Portfolio 2025</p>
+    <p>Jacopo Corrao</p>
     <p style="opacity: 0.4; margin-top: 10px;"><3</p>
   </footer>
 
@@ -796,4 +702,239 @@ title: Jacopo Corrao
         document.body.style.overflow = 'auto';
     }
   }
+</script>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- DATI ---
+    const graphData = {
+        nodes: [
+            // AI Group
+            { id: "Python", group: "blue", val: 3 },
+            { id: "Machine Learning", group: "blue", val: 2 },
+            { id: "Data Science", group: "blue", val: 2 },
+            { id: "NLP", group: "blue", val: 2 },
+            
+            // Mobile/Lang Group
+            { id: "Java", group: "purple", val: 3 },
+            { id: "Kotlin", group: "purple", val: 2 },
+            { id: "Compose", group: "purple", val: 2 },
+            { id: "Flutter", group: "purple", val: 2 },
+            { id: "C", group: "purple", val: 2 },
+            { id: "Go", group: "purple", val: 2 },
+
+            // DB Group
+            { id: "SQL", group: "cyan", val: 2 },
+            { id: "PostgreSQL", group: "cyan", val: 2 },
+
+            // OS Group
+            { id: "Linux", group: "green", val: 3 },
+            { id: "Debian", group: "green", val: 2 },
+            { id: "Windows", group: "green", val: 2 },
+            { id: "macOS", group: "green", val: 2 },
+            
+            // Tools Group
+            { id: "Git", group: "yellow", val: 2 },
+            { id: "LaTeX", group: "yellow", val: 2 },
+
+            // Languages Group
+            { id: "Italian", group: "orange", val: 1.5 },
+            { id: "English", group: "orange", val: 1.5 }
+        ],
+        links: [
+            { source: "Python", target: "Machine Learning" },
+            { source: "Python", target: "Data Science" },
+            { source: "Python", target: "NLP" },
+            { source: "Machine Learning", target: "Data Science" },
+            
+            { source: "Java", target: "Kotlin" },
+            { source: "Kotlin", target: "Compose" },
+            { source: "Java", target: "C" },
+            { source: "C", target: "Go" },
+            { source: "Kotlin", target: "Flutter" },
+
+            { source: "Python", target: "SQL" },
+            { source: "SQL", target: "PostgreSQL" },
+
+            { source: "Linux", target: "Debian" },
+            { source: "Linux", target: "Windows" },
+            { source: "Linux", target: "macOS" },
+            { source: "Linux", target: "Git" },
+            { source: "Git", target: "LaTeX" },
+            
+            { source: "Python", target: "C" },
+            { source: "Italian", target: "English" }
+        ]
+    };
+
+    const colors = {
+        blue: "#0A84FF", purple: "#BF5AF2", cyan: "#64D2FF",
+        green: "#30D158", yellow: "#FFD60A", orange: "#FF9F0A", default: "#86868b"
+    };
+
+    const container = document.getElementById("d3-graph-container");
+    const wrapper = document.querySelector(".graph-wrapper");
+    // Larghezza base (per il calcolo del centro iniziale)
+    let width = container.clientWidth;
+    let height = container.clientHeight;
+
+    const svg = d3.select("#d3-graph-container").append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("viewBox", [0, 0, width, height]);
+
+    // Funzione per capire se siamo su Mobile
+    const isMobile = () => window.innerWidth < 768;
+
+    // Simulazione Fisica (Standard Desktop-like, si adatterà al container mobile largo)
+    const simulation = d3.forceSimulation(graphData.nodes)
+        .force("link", d3.forceLink(graphData.links).id(d => d.id).distance(110)) 
+        .force("charge", d3.forceManyBody().strength(-800))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collide", d3.forceCollide().radius(d => (d.val * 25) + 30).iterations(2));
+
+    // Links
+    const linkBase = svg.append("g")
+        .selectAll("line")
+        .data(graphData.links)
+        .join("line")
+        .attr("class", "link-base");
+
+    const linkFlow = svg.append("g")
+        .selectAll("line")
+        .data(graphData.links)
+        .join("line")
+        .attr("class", "link-flow")
+        .style("stroke", d => colors[d.source.group] || colors.default);
+
+    // Nodes
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(graphData.nodes)
+        .join("g")
+        .attr("class", "node")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+    node.append("circle")
+        .attr("r", d => 25 + (d.val * 10))
+        .style("stroke", d => colors[d.group] || colors.default)
+        .style("color", d => colors[d.group] || colors.default);
+
+    node.append("text")
+        .text(d => d.id)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .style("font-size", d => Math.max(11, d.val * 4) + "px")
+        .call(wrapText);
+
+
+    // --- GESTIONE INTERAZIONE (Mouse + Touch) ---
+
+    // Gestione clic/tap sul nodo
+    node.on("click", function(event, d) {
+        event.stopPropagation();
+        activateNode(d);
+    });
+
+    // Gestione hover (Solo Desktop)
+    node.on("mouseover", function(event, d) {
+        if (!isMobile()) activateNode(d);
+    });
+    
+    node.on("mouseout", function() {
+        if (!isMobile()) resetActive();
+    });
+
+    // Tap sullo sfondo resetta tutto
+    svg.on("click", function() {
+        resetActive();
+    });
+
+    function activateNode(d) {
+        wrapper.classList.add("has-active");
+        
+        node.classed("active", false).classed("neighbor", false);
+        linkFlow.classed("active", false);
+
+        const currentNode = node.filter(n => n.id === d.id);
+        currentNode.classed("active", true);
+
+        const neighbors = new Set();
+        graphData.links.forEach(l => {
+            if (l.source.id === d.id) neighbors.add(l.target.id);
+            if (l.target.id === d.id) neighbors.add(l.source.id);
+        });
+
+        node.classed("neighbor", n => neighbors.has(n.id));
+        linkFlow.classed("active", l => l.source.id === d.id || l.target.id === d.id);
+    }
+
+    function resetActive() {
+        wrapper.classList.remove("has-active");
+        node.classed("active", false).classed("neighbor", false);
+        linkFlow.classed("active", false);
+    }
+
+    // Aggiornamento Posizioni
+    simulation.on("tick", () => {
+        const padding = 20; 
+        
+        node.attr("transform", d => {
+            const radius = 25 + (d.val * 10);
+            d.x = Math.max(radius + padding, Math.min(width - radius - padding, d.x));
+            d.y = Math.max(radius + padding, Math.min(height - radius - padding, d.y));
+            return `translate(${d.x},${d.y})`;
+        });
+
+        linkBase
+            .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+            
+        linkFlow
+            .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+    });
+
+    function wrapText(text) {
+        text.each(function() {
+            const t = d3.select(this);
+            const words = t.text().split(/\s+/).reverse();
+            if (words.length > 1) {
+                t.text(null);
+                t.append("tspan").attr("x", 0).attr("dy", "-0.4em").text(words.pop());
+                t.append("tspan").attr("x", 0).attr("dy", "1.2em").text(words.pop());
+            }
+        });
+    }
+
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
+    
+    // Resize Intelligente (Se ruoti il telefono o ridimensioni la finestra)
+    window.addEventListener('resize', () => {
+       width = container.clientWidth;
+       height = container.clientHeight;
+       
+       svg.attr("viewBox", [0, 0, width, height]);
+       simulation.force("center", d3.forceCenter(width / 2, height / 2));
+       simulation.alpha(0.3).restart();
+    });
+});
 </script>
