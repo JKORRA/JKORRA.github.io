@@ -87,61 +87,85 @@ document.addEventListener("DOMContentLoaded", function() {
     // DATI DEL GRAFO
     const graphData = {
         nodes: [
-            // AI Group
-            { id: "Python", group: "blue", val: 3 },
+
+	    { id: "Python", group: "blue", val: 3. },
             { id: "Machine Learning", group: "blue", val: 2 },
             { id: "Data Science", group: "blue", val: 2 },
             { id: "NLP", group: "blue", val: 2 },
             
-            // Mobile/Lang Group
+            // Mobile/Lang Group (Purple)
             { id: "Java", group: "purple", val: 3 },
-            { id: "Kotlin", group: "purple", val: 2 },
+            { id: "Kotlin", group: "purple", val: 2.5 },
+            { id: "Dart", group: "purple", val: 2.5 }, 
             { id: "Compose", group: "purple", val: 2 },
-            { id: "Flutter", group: "purple", val: 2 },
+            { id: "Flutter", group: "purple", val: 2.5 },
             { id: "C", group: "purple", val: 2 },
             { id: "Go", group: "purple", val: 2 },
 
-            // DB Group
+            // DB Group (Cyan)
             { id: "SQL", group: "cyan", val: 2 },
-            { id: "PostgreSQL", group: "cyan", val: 2 },
+            { id: "PostgreSQL", group: "cyan", val: 2.2 },
 
-            // OS Group
-            { id: "Linux", group: "green", val: 3 },
+            // OS Group (Green)
+            { id: "OS", group: "green", val: 3 }, 
+            { id: "Linux", group: "green", val: 2.5 },
             { id: "Debian", group: "green", val: 2 },
-            { id: "Windows", group: "green", val: 2 },
-            { id: "macOS", group: "green", val: 2 },
+            { id: "Windows", group: "green", val: 1.8 },
+            { id: "macOS", group: "green", val: 1.8 },
             
-            // Tools Group
-            { id: "Git", group: "yellow", val: 2 },
+            // Tools Group (Yellow)
+            { id: "Tools", group: "yellow", val: 2.5 }, 
+            { id: "Git", group: "yellow", val: 2.2 },
             { id: "LaTeX", group: "yellow", val: 2 },
 
-            // Languages Group
+            // Soft Skills (Orange)
+            { id: "Soft Skills", group: "orange", val: 2.5 }, 
             { id: "Italian", group: "orange", val: 1.5 },
             { id: "English", group: "orange", val: 1.5 }
+
         ],
         links: [
+		// AI Cluster
             { source: "Python", target: "Machine Learning" },
             { source: "Python", target: "Data Science" },
             { source: "Python", target: "NLP" },
             { source: "Machine Learning", target: "Data Science" },
-            
+
+            // Mobile/Lang Cluster
             { source: "Java", target: "Kotlin" },
             { source: "Kotlin", target: "Compose" },
             { source: "Java", target: "C" },
             { source: "C", target: "Go" },
+
+            // Flutter Cluster
+            { source: "Dart", target: "Flutter" },
+            { source: "Dart", target: "Kotlin" },
             { source: "Kotlin", target: "Flutter" },
 
+            // Data & DB
             { source: "Python", target: "SQL" },
+            { source: "Python", target: "PostgreSQL" },
             { source: "SQL", target: "PostgreSQL" },
 
+            // OS Cluster
+            { source: "OS", target: "Linux" },
+            { source: "OS", target: "Windows" },
+            { source: "OS", target: "macOS" },
             { source: "Linux", target: "Debian" },
-            { source: "Linux", target: "Windows" },
-            { source: "Linux", target: "macOS" },
-            { source: "Linux", target: "Git" },
-            { source: "Git", target: "LaTeX" },
-            
+
+            // Tools Cluster
+            { source: "Tools", target: "Git" },
+            { source: "Tools", target: "LaTeX" },
+            { source: "Tools", target: "OS" },
+            { source: "Git", target: "OS" },
+
+            // Cross-Cluster & Bridges
             { source: "Python", target: "C" },
-            { source: "Italian", target: "English" }
+            { source: "C", target: "Linux" }, // CRITICAL LINK: Connects the two main islands
+
+            // Soft Skills
+            { source: "Soft Skills", target: "Italian" },
+            { source: "Soft Skills", target: "English" }
         ]
     };
 
@@ -159,15 +183,25 @@ document.addEventListener("DOMContentLoaded", function() {
         .attr("height", "100%")
         .attr("viewBox", [0, 0, width, height]);
 
-    // Helper per mobile
+    // Helper per mobile (move this UP if it's currently below the simulation code)
     const isMobile = () => window.innerWidth < 768;
+
+    // DEFINISCI I PARAMETRI IN BASE AL DISPOSITIVO
+    // Su mobile aumentiamo la distanza e la repulsione per sfruttare lo scroll orizzontale
+    const chargeStrength = isMobile() ? -2500 : -800; // Molto più forte su mobile
+    const linkDistance = isMobile() ? 180 : 110;      // Link più lunghi su mobile
+    const collisionIter = isMobile() ? 5 : 2;         // Più iterazioni per evitare sovrapposizioni
 
     // CONFIGURAZIONE SIMULAZIONE FISICA
     const simulation = d3.forceSimulation(graphData.nodes)
-        .force("link", d3.forceLink(graphData.links).id(d => d.id).distance(110)) 
-        .force("charge", d3.forceManyBody().strength(-800))
+        .force("link", d3.forceLink(graphData.links)
+            .id(d => d.id)
+            .distance(linkDistance)) // Usa variabile dinamica
+        .force("charge", d3.forceManyBody().strength(chargeStrength)) // Usa variabile dinamica
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collide", d3.forceCollide().radius(d => (d.val * 25) + 30).iterations(2));
+        .force("collide", d3.forceCollide()
+            .radius(d => (d.val * 25) + 35) // Aumentato leggermente il padding (+35)
+            .iterations(collisionIter));    // Più calcoli per evitare compenetrazione
 
     // Creazione Elementi Grafici
     const linkBase = svg.append("g")
@@ -304,9 +338,18 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener('resize', () => {
        width = container.clientWidth;
        height = container.clientHeight;
-       
+
        svg.attr("viewBox", [0, 0, width, height]);
+
+       // Re-calculate dynamic parameters on resize
+       const newCharge = isMobile() ? -2500 : -800;
+       const newDist = isMobile() ? 180 : 110;
+
+       // Apply new center AND new forces
        simulation.force("center", d3.forceCenter(width / 2, height / 2));
+       simulation.force("charge", d3.forceManyBody().strength(newCharge));
+       simulation.force("link", d3.forceLink(graphData.links).id(d => d.id).distance(newDist));
+
        simulation.alpha(0.3).restart();
     });
 });

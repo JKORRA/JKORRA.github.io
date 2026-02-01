@@ -421,17 +421,16 @@
     /* --- FIX DEFINITIVO GRAFO MOBILE --- */
     .mobile-scroll-hint { display: block; } /* Mostra l'avviso di scroll */
     
-    .graph-wrapper { 
-        height: 500px; /* Ridotto altezza solo per mobile */
-        overflow-x: auto; /* Permette scroll orizzontale */
+    .graph-wrapper {
+        height: 600px; /* Increased from 500px to 600px */
+        overflow-x: auto;
         overflow-y: hidden;
-        -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
+        -webkit-overflow-scrolling: touch;
         border: 1px solid #333;
     }
-    
-    /* Questo forza il contenitore D3 ad essere LUNGO, creando lo scroll */
+
     #d3-graph-container {
-        min-width: 900px; /* <--- TRUCCO: Il grafo si crede su desktop */
+        min-width: 1000px; /* Increased from 900px to ensure plenty of width */
         height: 100%;
     }
   }
