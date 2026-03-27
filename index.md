@@ -3,6 +3,15 @@ layout: default
 title: Jacopo Corrao
 ---
 
+<!-- Splash loading screen (desktop only) -->
+<div class="splash-screen" id="splashScreen">
+  <div class="fog-container">
+    <div class="fog-layer fog-layer-1"></div>
+    <div class="fog-layer fog-layer-2"></div>
+    <div class="fog-vignette"></div>
+  </div>
+</div>
+
 <link rel="stylesheet" href="assets/css/style.css">
 
 <div class="main-container">
@@ -31,13 +40,23 @@ title: Jacopo Corrao
     </a>
   </div>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
-      My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in <strong>Computer Science</strong>.<br>
-      Driven by the desire to gain new experiences, I decided to move to <strong>Trento</strong> to continue my studies.<br>
-      I am now attending a master's degree course in Computer Science, specialising in <strong>Data Science</strong>.
-   </p>
+  <section id="about" class="about-scroll-section">
+    <div class="spline-wrapper">
+      <div class="spline-hint" id="splineHint">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 13"/></svg>
+        Drag to rotate
+      </div>
+      <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.72/build/spline-viewer.js"></script>
+      <spline-viewer url="https://prod.spline.design/ZU9XHvQphpJVRiT4/scene.splinecode"></spline-viewer>
+    </div>
+    <div class="about-content">
+      <h2>About Me</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
+        My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in <strong>Computer Science</strong>.<br>
+        Driven by the desire to gain new experiences, I decided to move to <strong>Trento</strong> to continue my studies.<br>
+        I am now attending a master's degree course in Computer Science, specialising in <strong>Data Science</strong>.
+      </p>
+    </div>
   </section>
 
   <section id="skills">

@@ -75,7 +75,81 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     // Avvia l'effetto dopo mezzo secondo
-    setTimeout(type, 500);
+    // Verrà avviato dinamicamente dopo lo splash screen
+    function startTyping() {
+        setTimeout(type, 200);
+    }
+
+    // Better mobile/touch detection to handle landscape mode and tablets
+    const isTouchDevice = (('ontouchstart' in window) ||
+                           (navigator.maxTouchPoints > 0) ||
+                           (navigator.msMaxTouchPoints > 0));
+                           
+    // We consider it mobile if it's a touch device OR if screen is very narrow
+    const isMobileDevice = isTouchDevice || window.innerWidth < 768;
+
+    // --- A2. SPLINE VIEWER + SPLASH SCREEN ---
+    const splineViewer = document.querySelector('spline-viewer');
+    const splineWrapper = document.querySelector('.spline-wrapper');
+    const splashScreen = document.getElementById('splashScreen');
+
+    if (isMobileDevice) {
+        if (splashScreen) splashScreen.remove();
+        startTyping();
+    } else if (splineViewer && splineWrapper) {
+
+        // Block wheel zoom — only drag-to-rotate allowed
+        splineWrapper.addEventListener('wheel', function(e) {
+            e.stopPropagation();
+        }, { capture: true });
+
+        // Splash screen progress + dismissal
+        let dismissed = false;
+        function dismissSplash() {
+            if (dismissed) return;
+            dismissed = true;
+            if (splashScreen) {
+                splashScreen.classList.add('exit');
+                // Remove from DOM after animation completes
+                setTimeout(function() {
+                    splashScreen.remove();
+                    startTyping();
+                }, 2000); // Wait for the fade out to finish
+            } else {
+                startTyping();
+            }
+        }
+
+        function onModelReady() {
+            dismissSplash();
+        }
+
+        // Strategy 1: load event
+        splineViewer.addEventListener('load', onModelReady);
+
+        // Strategy 2: canvas poll
+        var readyCheck = setInterval(function() {
+            if (splineViewer.shadowRoot && splineViewer.shadowRoot.querySelector('canvas')) {
+                clearInterval(readyCheck);
+                setTimeout(onModelReady, 300);
+            }
+        }, 500);
+
+        // Strategy 3: timeout fallback (dismiss after 6s max)
+        setTimeout(onModelReady, 6000);
+        setTimeout(function() { clearInterval(readyCheck); }, 20000);
+    } else {
+        // No Spline viewer — dismiss splash immediately
+        if (splashScreen) {
+            splashScreen.classList.add('exit');
+            setTimeout(function() {
+                splashScreen.remove();
+                startTyping();
+            }, 2000);
+        } else {
+            startTyping();
+        }
+    }
 
 
     // --- B. GRAFICO D3.JS ---
