@@ -52,9 +52,11 @@ title: Jacopo Corrao
     <div class="about-content">
       <h2>About Me</h2>
       <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
-        My academic journey began in <strong>Varese</strong>, where I earned my Bachelor's degree in <strong>Computer Science</strong>.<br>
-        Driven by the desire to gain new experiences, I decided to move to <strong>Trento</strong> to continue my studies.<br>
-        I am now attending a master's degree course in Computer Science, specialising in <strong>Data Science</strong>.
+My fascination with technology began in middle school when I received my first <strong>iPhone 4</strong>. Rather than just using it, I wanted to unlock its full potential, leading to my first real "tech" achievement: <strong>jailbreaking the OS</strong>. That early curiosity eventually became a professional pursuit, leading me to earn my <strong>Bachelor’s degree in Computer Science in my hometown of Varese</strong>.
+
+Driven by a desire for new experiences and a change of scenery, I moved to <strong>Trento</strong>, where I am currently pursuing my <strong>Master’s in Computer Science</strong>.
+
+While my academic path covers the broad spectrum of CS, I have a deep-seated passion for <strong>Artificial Intelligence</strong>. I believe the most exciting technology happens at the intersection of different worlds. Outside of my studies, I am an avid lover of <strong>Music and Art</strong>, and I am constantly seeking the "harmony" between these passions and my technical work. By using <strong>Machine Learning</strong>, I aim to explore new frontiers in digital creativity and human expression.
       </p>
     </div>
   </section>
