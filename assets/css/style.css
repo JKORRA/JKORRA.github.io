@@ -207,12 +207,13 @@
     height: auto; /* Let it stretch automatically via align-items: stretch */
     min-height: 80vh; /* Keep a sane minimum height */
     position: relative;
-    z-index: 1;
+    z-index: 3; /* Raised above about-content (2) to guarantee no overlap issues */
     overflow: hidden;
     order: 2;
     display: flex; /* Helps child take full height */
     align-items: center;
     justify-content: center;
+    touch-action: none; /* Crucial for iOS/Android touch compatibility on custom components */
   }
 
   spline-viewer {
@@ -314,23 +315,27 @@
   .graph-wrapper {
     position: relative;
     width: 100%;
-    height: 700px; /* Default Desktop Height */
+    height: 600px;
     background: transparent;
     margin: 0 auto;
-    overflow: hidden; /* Su desktop niente scroll */
-    border-radius: 20px; /* Leggero bordo per definire l'area */
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
+    border: 1px solid #333;
   }
 
   #d3-graph-container {
     width: 100%;
+    min-width: 1000px;
     height: 100%;
     cursor: grab;
   }
   #d3-graph-container:active { cursor: grabbing; }
 
-  /* Hint per scroll su mobile (nascosto su desktop) */
+  /* Hint per scroll (visibile ovunque) */
   .mobile-scroll-hint {
-    display: none;
+    display: block;
     text-align: center;
     color: var(--apple-subtext);
     font-size: 0.9rem;
@@ -650,19 +655,5 @@
       }
     }
     
-    /* --- FIX DEFINITIVO GRAFO MOBILE --- */
-    .mobile-scroll-hint { display: block; } /* Mostra l'avviso di scroll */
-    
-    .graph-wrapper {
-        height: 600px; /* Increased from 500px to 600px */
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid #333;
-    }
-
-    #d3-graph-container {
-        min-width: 1000px; /* Increased from 900px to ensure plenty of width */
-        height: 100%;
-    }
+    /* Graph Fixes have been moved to global CSS above */
   }
