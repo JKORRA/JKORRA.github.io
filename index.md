@@ -52,12 +52,38 @@ title: Jacopo Corrao
     <div class="about-content">
       <h2>About Me</h2>
       <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
-My fascination with technology began in middle school when I received my first <strong>iPhone 4</strong>. Rather than just using it, I wanted to unlock its full potential, leading to my first real "tech" achievement: <strong>jailbreaking the OS</strong>. That early curiosity eventually became a professional pursuit, leading me to earn my <strong>Bachelor’s degree in Computer Science in my hometown of Varese</strong>.
-
-Driven by a desire for new experiences and a change of scenery, I moved to <strong>Trento</strong>, where I am currently pursuing my <strong>Master’s in Computer Science</strong>.
-
-While my academic path covers the broad spectrum of CS, I have a deep-seated passion for <strong>Artificial Intelligence</strong>. I believe the most exciting technology happens at the intersection of different worlds. Outside of my studies, I am an avid lover of <strong>Music and Art</strong>, and I am constantly seeking the "harmony" between these passions and my technical work. By using <strong>Machine Learning</strong>, I aim to explore new frontiers in digital creativity and human expression.
+        My fascination with technology began in middle school. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.
       </p>
+      <ul class="about-timeline">
+        <li>
+          <div class="timeline-icon">📱</div>
+          <div class="timeline-content">
+            <strong>The Spark</strong>
+            <span>Jailbreaking my first iPhone 4 to unlock its full potential.</span>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-icon">🎓</div>
+          <div class="timeline-content">
+            <strong>Foundations</strong>
+            <span>Earned my Bachelor’s degree in Computer Science in my hometown of Varese.</span>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-icon">🏔️</div>
+          <div class="timeline-content">
+            <strong>Next Level</strong>
+            <span>Currently pursuing my Master’s in Computer Science here in Trento.</span>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-icon">✨</div>
+          <div class="timeline-content">
+            <strong>Passions</strong>
+            <span>Deeply passionate about AI, Music, and Art. I love exploring the correlations between them and finding ways to merge the technical world of computer science with human creativity.</span>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 

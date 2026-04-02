@@ -80,29 +80,19 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(type, 200);
     }
 
-    // Better mobile/touch detection to handle landscape mode and tablets
-    const isTouchDevice = (('ontouchstart' in window) ||
-                           (navigator.maxTouchPoints > 0) ||
-                           (navigator.msMaxTouchPoints > 0));
-                           
-    // We consider it mobile if it's a touch device OR if screen is very narrow
-    const isMobileDevice = isTouchDevice || window.innerWidth < 768;
-
     // --- A2. SPLINE VIEWER + SPLASH SCREEN ---
     const splineViewer = document.querySelector('spline-viewer');
     const splineWrapper = document.querySelector('.spline-wrapper');
     const splashScreen = document.getElementById('splashScreen');
 
-    if (isMobileDevice) {
-        if (splashScreen) splashScreen.remove();
-        startTyping();
-    } else if (splineViewer && splineWrapper) {
-
+    if (splineWrapper) {
         // Block wheel zoom — only drag-to-rotate allowed
         splineWrapper.addEventListener('wheel', function(e) {
             e.stopPropagation();
         }, { capture: true });
+    }
 
+    if (splineViewer) {
         // Splash screen progress + dismissal
         let dismissed = false;
         function dismissSplash() {
@@ -135,9 +125,9 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }, 500);
 
-        // Strategy 3: timeout fallback (dismiss after 6s max)
-        setTimeout(onModelReady, 6000);
-        setTimeout(function() { clearInterval(readyCheck); }, 20000);
+        // Strategy 3: timeout fallback (dismiss after 4.5s max to prevent indefinite locking on mobile/slow connections)
+        setTimeout(onModelReady, 4500);
+        setTimeout(function() { clearInterval(readyCheck); }, 15000);
     } else {
         // No Spline viewer — dismiss splash immediately
         if (splashScreen) {

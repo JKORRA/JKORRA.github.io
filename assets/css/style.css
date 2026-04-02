@@ -129,7 +129,7 @@
     display: flex !important;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch; /* Stretch to allow children to match the tallest item */
     margin-bottom: 80px;
     min-height: 80vh;
   }
@@ -140,19 +140,79 @@
     position: relative;
     z-index: 2;
     order: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .about-content h2 {
     margin-top: 0;
   }
 
+  /* --- ABOUT TIMELINE --- */
+  .about-timeline {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+  }
+
+  .about-timeline li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    background: rgba(28, 28, 30, 0.4);
+    padding: 15px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .about-timeline li:hover {
+    transform: translateY(-2px);
+    background: rgba(28, 28, 30, 0.8);
+  }
+
+  .timeline-icon {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    background: rgba(41, 151, 255, 0.1);
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline-content strong {
+    color: #fff;
+    font-size: 1.05rem;
+    margin-bottom: 3px;
+    font-weight: 600;
+  }
+
+  .timeline-content span {
+    color: var(--apple-subtext);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
   .spline-wrapper {
     width: 50%;
-    height: 80vh;
+    height: auto; /* Let it stretch automatically via align-items: stretch */
+    min-height: 80vh; /* Keep a sane minimum height */
     position: relative;
     z-index: 1;
     overflow: hidden;
     order: 2;
+    display: flex; /* Helps child take full height */
+    align-items: center;
+    justify-content: center;
   }
 
   spline-viewer {
@@ -545,10 +605,16 @@
 
   /* Tablets and Touch Devices (Landscape & Portrait) */
   @media (hover: none) and (pointer: coarse) {
-    .splash-screen { display: none !important; }
     .spline-wrapper { display: none !important; }
     .about-scroll-section { display: block !important; height: auto; min-height: auto; }
     .about-content { width: 100%; padding-top: 0; order: unset; }
+  }
+
+  /* Specific rule for mobile/touch landscape */
+  @media (hover: none) and (pointer: coarse) and (orientation: landscape), (max-width: 932px) and (orientation: landscape) {
+    .spline-wrapper { display: flex !important; width: 50%; height: auto !important; min-height: 100% !important; align-items: center; justify-content: center; }
+    .about-scroll-section { display: flex !important; flex-direction: row; align-items: stretch; }
+    .about-content { width: 45%; padding-top: 5vh; }
   }
 
   /* Strict Mobile Width */
@@ -569,21 +635,19 @@
     h2 { font-size: 1.8rem; margin-top: 60px; }
     .contact-section { padding: 40px 20px; }
 
-    /* --- HIDE SPLASH + AVATAR ON MOBILE --- */
-    .splash-screen { display: none !important; }
-    .spline-wrapper { display: none !important; }
-
-    /* --- ABOUT SECTION MOBILE --- */
-    .about-scroll-section {
-      display: block !important;
-      height: auto;
-      min-height: auto;
-    }
-
-    .about-content {
-      width: 100%;
-      padding-top: 0;
-      order: unset;
+    /* For portrait strict mobile, hide the avatar */
+    @media (orientation: portrait) {
+      .spline-wrapper { display: none !important; }
+      .about-scroll-section {
+        display: block !important;
+        height: auto;
+        min-height: auto;
+      }
+      .about-content {
+        width: 100%;
+        padding-top: 0;
+        order: unset;
+      }
     }
     
     /* --- FIX DEFINITIVO GRAFO MOBILE --- */
