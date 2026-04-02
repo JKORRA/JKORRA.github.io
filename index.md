@@ -47,7 +47,7 @@ title: Jacopo Corrao
         Drag to rotate
       </div>
       <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.72/build/spline-viewer.js"></script>
-      <spline-viewer url="https://prod.spline.design/ZU9XHvQphpJVRiT4/scene.splinecode"></spline-viewer>
+      <spline-viewer url="https://prod.spline.design/ZU9XHvQphpJVRiT4/scene.splinecode" events-target="global"></spline-viewer>
     </div>
     <div class="about-content">
       <h2>About Me</h2>
