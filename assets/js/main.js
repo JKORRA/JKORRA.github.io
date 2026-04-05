@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(type, 200);
     }
 
-    // --- A2. SPLINE VIEWER + SPLASH SCREEN ---
+    // --- A2. SPLINE VIEWER + SPLASH SCREEN (Three.js Procedural Clouds) ---
     const splineViewer = document.querySelector('spline-viewer');
     const splineWrapper = document.querySelector('.spline-wrapper');
     const splashScreen = document.getElementById('splashScreen');
@@ -92,50 +92,203 @@ document.addEventListener("DOMContentLoaded", function() {
         }, { capture: true });
     }
 
-    if (splineViewer) {
-        // Splash screen progress + dismissal
+    let isSplashActive = splashScreen !== null;
+    let splashReqId, scene, camera, renderer, cloudSystem;
+
+    if (isSplashActive && typeof THREE !== 'undefined') {
+        // Billboard Cloud System customized for dark/mysterious look
+        class BillboardCloudSystem {
+            constructor(scene, camera, options = {}) {
+                this.scene = scene;
+                this.camera = camera;
+                this.count = options.count ?? 40;
+                this.spread = options.spread ?? 350;
+                this.altitude = options.altitude ?? 0;
+                this.clouds = [];
+            }
+            
+            seededRandom(seed) {
+                const s = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+                return s - Math.floor(s);
+            }
+
+            generate(seed = 0) {
+                const texture = this._generateCloudTexture(256); // reduced size since it's just a soft gradient now
+
+                for (let i = 0; i < this.count; i++) {
+                    const material = new THREE.SpriteMaterial({
+                        map: texture,
+                        transparent: true,
+                        // Opacity variation for depth
+                        opacity: 0.3 + this.seededRandom(seed + i * 5) * 0.5,
+                        depthWrite: false,
+                        // Mysterious dark blue/slate color
+                        color: new THREE.Color().setHSL(0.65, 0.25, 0.12 + this.seededRandom(seed + i * 7) * 0.08),
+                        blending: THREE.NormalBlending
+                    });
+
+                    const sprite = new THREE.Sprite(material);
+                    const sx = 80 + this.seededRandom(seed + i * 11) * 120; // slightly larger to compensate for smooth edges
+                    sprite.scale.set(sx, sx * (0.6 + this.seededRandom(seed + i * 13) * 0.4), 1);
+                    
+                    // Distribute around the camera, mostly deeper on Z
+                    sprite.position.set(
+                        (this.seededRandom(seed + i * 2) - 0.5) * this.spread,
+                        this.altitude + (this.seededRandom(seed + i * 3) - 0.5) * 80,
+                        (this.seededRandom(seed + i * 4) - 0.5) * 150 - 50
+                    );
+
+                    // Random initial rotation
+                    material.rotation = this.seededRandom(seed + i * 8) * Math.PI * 2;
+
+                    this.scene.add(sprite);
+                    // Store rotation speed
+                    this.clouds.push({ sprite, rotSpeed: (this.seededRandom(seed + i) - 0.5) * 0.002 });
+                }
+            }
+
+            _generateCloudTexture(size) {
+                const canvas = document.createElement('canvas');
+                canvas.width = canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+                grad.addColorStop(0, 'rgba(255,255,255,0.8)');
+                grad.addColorStop(0.4, 'rgba(255,255,255,0.4)');
+                grad.addColorStop(0.7, 'rgba(255,255,255,0.1)');
+                grad.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, size, size);
+
+                const tex = new THREE.CanvasTexture(canvas);
+                tex.needsUpdate = true;
+                return tex;
+            }
+
+            update(time, windSpeed = 5) {
+                for (const cloud of this.clouds) {
+                    // Drift horizontally
+                    cloud.sprite.position.x += windSpeed * 0.08;
+                    // Slowly approach the camera on Z axis for 3D depth
+                    cloud.sprite.position.z += windSpeed * 0.05;
+                    
+                    // Gentle vertical bobbing based on time and a random offset (using sprite.id)
+                    cloud.sprite.position.y += Math.sin(time * 0.8 + cloud.sprite.id) * 0.05;
+
+                    cloud.sprite.material.rotation += cloud.rotSpeed * 3.0; // Faster swirl
+
+                    // Wrap horizontally
+                    if (cloud.sprite.position.x > this.spread / 2) {
+                        cloud.sprite.position.x -= this.spread;
+                    }
+                    // Wrap depth: if it passes the camera (Z=50), send it deep into the background
+                    if (cloud.sprite.position.z > 60) {
+                        cloud.sprite.position.z = -150 - Math.random() * 50; 
+                    }
+                }
+            }
+
+            dispose() {
+                for (const c of this.clouds) {
+                    this.scene.remove(c.sprite); 
+                    if (c.sprite.material.map) c.sprite.material.map.dispose();
+                    c.sprite.material.dispose();
+                }
+                this.clouds = [];
+            }
+        }
+
+        // Initialize Scene
+        scene = new THREE.Scene();
+        
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 50);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        splashScreen.appendChild(renderer.domElement);
+
+        cloudSystem = new BillboardCloudSystem(scene, camera);
+        cloudSystem.generate(88);
+
+        let flyThroughActive = false;
+        let flySpeed = 0;
+
+        const clock = new THREE.Clock();
+        function animateSplash() {
+            if (!isSplashActive) return;
+            splashReqId = requestAnimationFrame(animateSplash);
+            
+            const t = clock.getElapsedTime();
+            cloudSystem.update(t, 5.0); // Increased ambient wind drift
+            
+            if (flyThroughActive) {
+                // Accelerate camera forward
+                flySpeed += 0.04;
+                camera.position.z -= flySpeed;
+                // Add a slight tilt to the camera during fly-through
+                camera.rotation.z += 0.001;
+            }
+
+            renderer.render(scene, camera);
+        }
+        animateSplash();
+
+        function onWindowResize() {
+            if (!isSplashActive) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        window.addEventListener('resize', onWindowResize, false);
+
         let dismissed = false;
         function dismissSplash() {
             if (dismissed) return;
             dismissed = true;
-            if (splashScreen) {
-                splashScreen.classList.add('exit');
-                // Remove from DOM after animation completes
-                setTimeout(function() {
-                    splashScreen.remove();
-                    startTyping();
-                }, 2000); // Wait for the fade out to finish
-            } else {
-                startTyping();
-            }
-        }
-
-        function onModelReady() {
-            dismissSplash();
-        }
-
-        // Strategy 1: load event
-        splineViewer.addEventListener('load', onModelReady);
-
-        // Strategy 2: canvas poll
-        var readyCheck = setInterval(function() {
-            if (splineViewer.shadowRoot && splineViewer.shadowRoot.querySelector('canvas')) {
-                clearInterval(readyCheck);
-                setTimeout(onModelReady, 300);
-            }
-        }, 500);
-
-        // Strategy 3: timeout fallback (dismiss after 4.5s max to prevent indefinite locking on mobile/slow connections)
-        setTimeout(onModelReady, 4500);
-        setTimeout(function() { clearInterval(readyCheck); }, 15000);
-    } else {
-        // No Spline viewer — dismiss splash immediately
-        if (splashScreen) {
+            
+            // Trigger fly-through and cross-fade out
+            flyThroughActive = true;
             splashScreen.classList.add('exit');
-            setTimeout(function() {
+            
+            // Wait for transition to finish then rigorously clean up
+            setTimeout(() => {
+                isSplashActive = false;
+                cancelAnimationFrame(splashReqId);
+                cloudSystem.dispose();
+                renderer.dispose();
+                window.removeEventListener('resize', onWindowResize);
                 splashScreen.remove();
                 startTyping();
-            }, 2000);
+            }, 2500); // Wait for the new 2.5s CSS transition
+        }
+
+        // Synchronization with Spline loading event
+        if (splineViewer) {
+            function onModelReady() { dismissSplash(); }
+            splineViewer.addEventListener('load', onModelReady);
+            
+            // Canvas polling fallback
+            var readyCheck = setInterval(() => {
+                if (splineViewer.shadowRoot && splineViewer.shadowRoot.querySelector('canvas')) {
+                    clearInterval(readyCheck);
+                    setTimeout(onModelReady, 300);
+                }
+            }, 500);
+            
+            // Hard timeout fallbacks
+            setTimeout(onModelReady, 4500);
+            setTimeout(() => clearInterval(readyCheck), 15000);
+        } else {
+            setTimeout(dismissSplash, 2000);
+        }
+
+    } else {
+        // Lightweight Fallback
+        if (splashScreen) {
+            splashScreen.classList.add('exit');
+            setTimeout(() => { splashScreen.remove(); startTyping(); }, 2500);
         } else {
             startTyping();
         }

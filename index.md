@@ -3,13 +3,12 @@ layout: default
 title: Jacopo Corrao
 ---
 
+<!-- Script for Three.js Splash Screen Clouds -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <!-- Splash loading screen (desktop only) -->
 <div class="splash-screen" id="splashScreen">
-  <div class="fog-container">
-    <div class="fog-layer fog-layer-1"></div>
-    <div class="fog-layer fog-layer-2"></div>
-    <div class="fog-vignette"></div>
-  </div>
+  <!-- Three.js Canvas will be injected here -->
 </div>
 
 <link rel="stylesheet" href="assets/css/style.css">
