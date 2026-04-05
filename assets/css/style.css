@@ -234,11 +234,11 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    transition: opacity 2s ease-in-out, visibility 2s ease-in-out;
+    transition: background-color 2s ease-in-out, visibility 2.5s ease-in-out;
   }
 
   .splash-screen.exit {
-    opacity: 0;
+    background-color: transparent;
     visibility: hidden;
     pointer-events: none;
   }
@@ -250,6 +250,18 @@
     height: 100vh;
     overflow: hidden;
     z-index: 1;
+    transform-origin: center center;
+    /* Added transition to allow the 'fly-through' dissolve effect */
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                filter 2.5s ease, 
+                opacity 2s ease-in-out;
+  }
+
+  /* Triggers the dissolving scale/blur effect when .exit is added */
+  .splash-screen.exit .fog-container {
+    transform: scale(2.5);
+    filter: blur(15px);
+    opacity: 0;
   }
 
   .fog-layer {
@@ -259,30 +271,40 @@
     top: 0;
     left: 0;
     background-repeat: repeat-x;
+    /* Scale height to 100% instead of cover to preserve aspect ratio while repeating */
     background-size: auto 100%;
     background-position: center;
     will-change: transform;
+    mix-blend-mode: screen; /* Blends better with dark backgrounds */
   }
 
   .fog-layer-1 {
     background-image: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog1.png');
     animation: driftFog 60s linear infinite;
     z-index: 2;
-    opacity: 0.5;
+    /* Increased opacity to make them more dense/visible */
+    opacity: 0.8;
   }
 
   .fog-layer-2 {
     background-image: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/fog2.png');
     animation: driftFog 40s linear infinite;
     z-index: 3;
-    opacity: 0.7;
+    /* Increased opacity to make them more dense/visible */
+    opacity: 1.0;
   }
 
   .fog-vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle, rgba(0,0,0,0) 20%, rgba(0,0,0,0.9) 100%);
+    /* Made the clear area larger so clouds are more visible in the center */
+    background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 100%);
     z-index: 4;
+    transition: opacity 1.5s ease-in-out;
+  }
+  
+  .splash-screen.exit .fog-vignette {
+    opacity: 0;
   }
 
   @keyframes driftFog {

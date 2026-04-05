@@ -210,7 +210,7 @@ title: Jacopo Corrao
       <div class="card" style="background: rgba(28,28,30,0.6); cursor: default;">
         <span style="color: var(--apple-blue); font-weight:bold; font-size: 0.8rem; text-transform: uppercase;">Current • Since Sep 2024</span>
         <h3 style="margin-top: 10px;">University of Trento</h3>
-        <p>Master in Computer Science<br><strong>Path: Data Science</strong></p>
+        <p>Master's Degree in Computer Science<br><em>Trento, Italy</em></p>
       </div>
       <div class="card" style="background: rgba(28,28,30,0.6); cursor: default;">
         <span style="color: #666; font-weight:bold; font-size: 0.8rem; text-transform: uppercase;">Graduated • Oct 2024</span>
