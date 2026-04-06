@@ -54,7 +54,7 @@ title: Jacopo Corrao
     <div class="about-content">
       <h2>About Me</h2>
       <p style="font-size: 1.1rem; line-height: 1.8; color: var(--apple-subtext);">
-        My fascination with technology began in middle school. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.
+        My fascination with technology began in <strong>middle school</strong>. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.
       </p>
       <ul class="about-timeline">
         <li>
