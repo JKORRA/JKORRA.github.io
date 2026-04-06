@@ -6,10 +6,13 @@ title: Jacopo Corrao
 <!-- Script for Three.js Splash Screen Clouds -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<!-- Splash loading screen (desktop only) -->
-<div class="splash-screen" id="splashScreen">
-  <!-- Three.js Canvas will be injected here -->
-</div>
+<!-- Persistant Three.js Background Canvas -->
+<div id="bgCanvasContainer"></div>
+
+<!-- FOUC prevention: Immediately hide main content until Spline loads -->
+<script id="splash-hider">
+  document.write('<style id="splash-hide-style">.header, .main-container { opacity: 0; pointer-events: none; }</style>');
+</script>
 
 <link rel="stylesheet" href="assets/css/style.css">
 
