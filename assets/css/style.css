@@ -1,7 +1,4 @@
   /* --- 1. RESET E VARIABILI --- */
-  header.site-header, footer.site-footer { display: none !important; }
-  .wrapper { max-width: 100% !important; padding: 0 !important; }
-
   :root {
     --apple-bg: #000000;
     --apple-card: #1c1c1e;

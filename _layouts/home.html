@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- seo -%}
+  <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
+  
+  <!-- FOUC prevention -->
+  <style id="splash-hide-style">
+    .main-container { opacity: 0; pointer-events: none; }
+    body { background-color: #000000; color: #f5f5f7; }
+  </style>
+
+  <!-- Three.js Splash Screen Clouds -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  
+  {%- feed_meta -%}
+</head>
+<body>
+  <!-- Persistent Three.js Background Canvas -->
+  <div id="bgCanvasContainer"></div>
+  
+  {{ content }}
+
+</body>
+</html>
