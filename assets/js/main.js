@@ -261,17 +261,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // Synchronization with Spline loading event
         if (splineViewer) {
             function onModelReady() { dismissSplash(); }
+            
+            // Trust the native load event, which fires when the 3D model finishes compiling shaders and renders
             splineViewer.addEventListener('load', onModelReady);
             
-            var readyCheck = setInterval(() => {
-                if (splineViewer.shadowRoot && splineViewer.shadowRoot.querySelector('canvas')) {
-                    clearInterval(readyCheck);
-                    setTimeout(onModelReady, 300);
-                }
-            }, 500);
-            
-            setTimeout(onModelReady, 4500);
-            setTimeout(() => clearInterval(readyCheck), 15000);
+            // Failsafe: if connection is extremely slow or Spline CDN drops, reveal site anyway after 8s
+            setTimeout(onModelReady, 8000);
         } else {
             setTimeout(dismissSplash, 2000);
         }
