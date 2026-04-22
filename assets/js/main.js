@@ -80,14 +80,14 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(type, 200);
     }
 
-    // --- A2. SPLINE VIEWER + PERSISTENT BACKGROUND (Three.js Procedural Clouds) ---
-    const splineViewer = document.querySelector('spline-viewer');
-    const splineWrapper = document.querySelector('.spline-wrapper');
+    // --- A2. 3D MODEL VIEWER + PERSISTENT BACKGROUND (Three.js Procedural Clouds) ---
+    const modelViewer = document.querySelector('model-viewer');
+    const meshWrapper = document.querySelector('.mesh-wrapper');
     const bgCanvasContainer = document.getElementById('bgCanvasContainer');
 
-    if (splineWrapper) {
+    if (meshWrapper) {
         // Block wheel zoom — only drag-to-rotate allowed
-        splineWrapper.addEventListener('wheel', function(e) {
+        meshWrapper.addEventListener('wheel', function(e) {
             e.stopPropagation();
         }, { capture: true });
     }
@@ -101,55 +101,62 @@ document.addEventListener("DOMContentLoaded", function() {
             constructor(scene, camera, options = {}) {
                 this.scene = scene;
                 this.camera = camera;
-                this.count = options.count ?? 50;
-                this.spread = options.spread ?? 500;
-                this.altitude = options.altitude ?? 0;
+                this.count = options.count ?? 60; // Slightly more clouds for density
+                
+                // Make the spawn area MASSIVE so you never see the edges
+                this.spreadX = options.spreadX ?? 1000; 
+                this.spreadZ = options.spreadZ ?? 400;  
+                
                 this.clouds = [];
             }
-            
-            seededRandom(seed) {
-                const s = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
-                return s - Math.floor(s);
-            }
 
-            generate(seed = 0) {
+            generate() {
                 const texture = this._generateCloudTexture(256);
 
                 for (let i = 0; i < this.count; i++) {
                     const material = new THREE.SpriteMaterial({
                         map: texture,
                         transparent: true,
-                        // Soft overall opacity for the background
-                        opacity: 0.15 + this.seededRandom(seed + i * 5) * 0.3,
+                        // Random opacity between 0.1 and 0.4
+                        opacity: Math.random() * 0.3 + 0.1, 
                         depthWrite: false,
-                        // Mysterious dark blue/slate color
-                        color: new THREE.Color().setHSL(0.65, 0.25, 0.12 + this.seededRandom(seed + i * 7) * 0.08),
+                        color: new THREE.Color().setHSL(0.65, 0.25, Math.random() * 0.1 + 0.12),
                         blending: THREE.NormalBlending
                     });
 
                     const sprite = new THREE.Sprite(material);
-                    const sx = 100 + this.seededRandom(seed + i * 11) * 150; 
-                    sprite.scale.set(sx, sx * (0.6 + this.seededRandom(seed + i * 13) * 0.4), 1);
                     
-                    // Distribute uniformly
-                    sprite.position.set(
-                        (this.seededRandom(seed + i * 2) - 0.5) * this.spread,
-                        this.altitude + (this.seededRandom(seed + i * 3) - 0.5) * 120, 
-                        (this.seededRandom(seed + i * 4) - 0.5) * 150 - 50 
-                    );
+                    // Randomly scale the clouds so some are huge and some are medium
+                    const scale = Math.random() * 200 + 200;
+                    sprite.scale.set(scale, scale * 0.7, 1);
 
-                    material.rotation = this.seededRandom(seed + i * 8) * Math.PI * 2;
+                    // Initial random placement
+                    this.recycleCloud(sprite, true);
+                    
+                    material.rotation = Math.random() * Math.PI * 2;
+                    
                     this.scene.add(sprite);
-                    this.clouds.push({ sprite, rotSpeed: (this.seededRandom(seed + i) - 0.5) * 0.0015 });
+                    this.clouds.push({ sprite, rotSpeed: (Math.random() - 0.5) * 0.002 });
                 }
             }
 
+            // Helper function to reset clouds cleanly
+            recycleCloud(sprite, isInit = false) {
+                // Spread widely across the X axis
+                sprite.position.x = (Math.random() - 0.5) * this.spreadX;
+                // Keep them roughly vertically centered
+                sprite.position.y = (Math.random() - 0.5) * 120;
+                
+                // If initializing, scatter them everywhere on Z. 
+                // If recycling during animation, put them at the very back of the scene.
+                sprite.position.z = isInit ? (Math.random() - 0.5) * this.spreadZ : -this.spreadZ / 2;
+            }
+
             _generateCloudTexture(size) {
+                // Your texture generation remains exactly the same! It was perfect.
                 const canvas = document.createElement('canvas');
                 canvas.width = canvas.height = size;
                 const ctx = canvas.getContext('2d');
-
-                // Pure radial gradient soft-particle
                 const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
                 grad.addColorStop(0, 'rgba(255,255,255,0.8)');
                 grad.addColorStop(0.4, 'rgba(255,255,255,0.4)');
@@ -157,7 +164,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 grad.addColorStop(1, 'rgba(255,255,255,0)');
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, size, size);
-
                 const tex = new THREE.CanvasTexture(canvas);
                 tex.needsUpdate = true;
                 return tex;
@@ -167,21 +173,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 const camZ = this.camera.position.z;
                 
                 for (const cloud of this.clouds) {
-                    // Constant slow ambient drifting
-                    cloud.sprite.position.x += windSpeed * 0.04;
-                    cloud.sprite.position.z += windSpeed * 0.02;
-                    cloud.sprite.position.y += Math.sin(time * 0.5 + cloud.sprite.id) * 0.05;
-                    cloud.sprite.material.rotation += cloud.rotSpeed * 2.0;
+                    // Drift right, slowly drift up/down, and move towards the camera
+                    cloud.sprite.position.x += windSpeed * 0.02;
+                    cloud.sprite.position.y += Math.sin(time * 0.5 + cloud.sprite.id) * 0.02;
+                    cloud.sprite.position.z += windSpeed * 0.05; 
+                    cloud.sprite.material.rotation += cloud.rotSpeed;
 
-                    // Infinite horizontal wrap
-                    if (cloud.sprite.position.x > this.spread / 2) {
-                        cloud.sprite.position.x -= this.spread;
-                    }
-
-                    // Wrap Z-axis relative to camera to create an infinite tunnel of clouds
+                    // THE FIX: Only recycle clouds when they pass completely behind the camera.
+                    // This prevents you from seeing them suddenly disappear on the right edge.
                     if (cloud.sprite.position.z > camZ + 10) {
-                        cloud.sprite.position.z = camZ - 150 - Math.random() * 50; 
-                        cloud.sprite.position.x = (Math.random() - 0.5) * this.spread;
+                        this.recycleCloud(cloud.sprite, false);
                     }
                 }
             }
@@ -199,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         bgCanvasContainer.appendChild(renderer.domElement);
 
-        cloudSystem = new BillboardCloudSystem(scene, camera);
+        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
         cloudSystem.generate(88);
 
         let flyThroughActive = false;
@@ -255,27 +256,28 @@ document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 flyThroughActive = false;
                 startTyping();
-            }, 2500); 
+            }, 1000); 
         }
 
-        // Synchronization with Spline loading event
-        if (splineViewer) {
-            function onModelReady() { dismissSplash(); }
+        // Dismiss splash screen quickly, don't wait for heavy 3D model
+        setTimeout(dismissSplash, 500);
+
+        // Fade in 3D model when it's fully ready
+        if (modelViewer) {
+            modelViewer.addEventListener('load', () => {
+                modelViewer.classList.add('is-loaded');
+            });
             
-            // Trust the native load event, which fires when the 3D model finishes compiling shaders and renders
-            splineViewer.addEventListener('load', onModelReady);
-            
-            // Failsafe: if connection is extremely slow or Spline CDN drops, reveal site anyway after 8s
-            setTimeout(onModelReady, 8000);
-        } else {
-            setTimeout(dismissSplash, 2000);
+            // Failsafe: if event drops, force show after a long wait
+            setTimeout(() => modelViewer.classList.add('is-loaded'), 12000);
         }
 
     } else {
         // Lightweight Fallback
+        const splashScreen = document.getElementById('splashScreen');
         if (splashScreen) {
             splashScreen.classList.add('exit');
-            setTimeout(() => { splashScreen.remove(); startTyping(); }, 2500);
+            setTimeout(() => { splashScreen.remove(); startTyping(); }, 1000);
         } else {
             startTyping();
         }
