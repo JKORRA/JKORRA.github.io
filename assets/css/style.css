@@ -571,29 +571,51 @@
   
   /* Medium screens / Resized desktop browsers */
   @media (max-width: 1024px) {
-    .mesh-wrapper { display: none !important; }
+    .mesh-wrapper { 
+      display: flex !important; 
+      width: 100%; 
+      height: 400px; 
+      min-height: 400px; 
+      margin-top: 0px;
+      margin-bottom: 30px;
+      order: -1;
+    }
     .about-scroll-section {
-      display: block !important;
+      display: flex !important;
+      flex-direction: column;
       height: auto;
       min-height: auto;
     }
     .about-content {
       width: 100%;
-      padding-top: 20px;
+      padding-top: 0px;
       order: unset;
     }
   }
 
   /* Tablets and Touch Devices (Landscape & Portrait) */
   @media (hover: none) and (pointer: coarse) {
-    .mesh-wrapper { display: none !important; }
-    .about-scroll-section { display: block !important; height: auto; min-height: auto; }
+    .mesh-wrapper { 
+      display: flex !important; 
+      width: 100%; 
+      height: 400px; 
+      min-height: 400px; 
+      margin-top: 0px;
+      margin-bottom: 30px;
+      order: -1;
+    }
+    .about-scroll-section { 
+      display: flex !important; 
+      flex-direction: column; 
+      height: auto; 
+      min-height: auto; 
+    }
     .about-content { width: 100%; padding-top: 0; order: unset; }
   }
 
   /* Specific rule for mobile/touch landscape */
   @media (hover: none) and (pointer: coarse) and (orientation: landscape), (max-width: 932px) and (orientation: landscape) {
-    .mesh-wrapper { display: flex !important; width: 50%; height: auto !important; min-height: 100% !important; align-items: center; justify-content: center; }
+    .mesh-wrapper { display: flex !important; width: 50%; height: auto !important; min-height: 100% !important; align-items: center; justify-content: center; margin-top: 0; margin-bottom: 0; order: 2; }
     .about-scroll-section { display: flex !important; flex-direction: row; align-items: stretch; }
     .about-content { width: 45%; padding-top: 5vh; }
   }
@@ -616,11 +638,20 @@
     h2 { font-size: 1.8rem; margin-top: 60px; }
     .contact-section { padding: 40px 20px; }
 
-    /* For portrait strict mobile, hide the avatar */
+    /* For portrait strict mobile, display avatar cleanly */
     @media (orientation: portrait) {
-      .mesh-wrapper { display: none !important; }
+      .mesh-wrapper { 
+        display: flex !important; 
+        width: 100%; 
+        height: 350px; 
+        min-height: 350px; 
+        margin-top: 0px;
+        margin-bottom: 30px;
+        order: -1;
+      }
       .about-scroll-section {
-        display: block !important;
+        display: flex !important;
+        flex-direction: column;
         height: auto;
         min-height: auto;
       }
