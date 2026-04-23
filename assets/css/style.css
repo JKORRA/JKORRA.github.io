@@ -316,31 +316,14 @@
 
   #d3-graph-container {
     width: 100%;
-    min-width: 1000px;
     height: 100%;
     cursor: grab;
   }
   #d3-graph-container:active { cursor: grabbing; }
 
-  /* Hint per scroll (visibile ovunque) */
+  /* Hint per scroll (visibile solo su mobile) */
   .mobile-scroll-hint {
-    display: flex;
-    width: fit-content;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 30px;
-    background: rgba(28, 28, 30, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 0 auto 20px auto;
-    animation: fadeIn 2s;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: none; /* Nascosto su desktop */
   }
 
   .mobile-scroll-hint svg {
@@ -665,6 +648,30 @@
     .modal-body { font-size: 1rem; } 
     h2 { font-size: 1.8rem; margin-top: 60px; }
     .contact-section { padding: 40px 20px; }
+
+    #d3-graph-container {
+      min-width: 1000px;
+    }
+
+    .mobile-scroll-hint {
+      display: flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 30px;
+      background: rgba(28, 28, 30, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: 0 auto 20px auto;
+      animation: fadeIn 2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
 
     /* For portrait strict mobile, display avatar cleanly */
     @media (orientation: portrait) {

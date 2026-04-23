@@ -269,28 +269,32 @@ document.addEventListener("DOMContentLoaded", function() {
             }, 1000); 
         }
 
-        // Dismiss splash screen quickly, don't wait for heavy 3D model
-        setTimeout(dismissSplash, 500);
-
-        // Fade in 3D model when it's fully ready
+        // Wait for the heavy 3D model to fully load before dismissing the splash screen
         if (modelViewer) {
             modelViewer.addEventListener('load', () => {
                 modelViewer.classList.add('is-loaded');
+                dismissSplash();
             });
             
-            // Failsafe: if event drops, force show after a long wait
-            setTimeout(() => modelViewer.classList.add('is-loaded'), 12000);
+            // Failsafe: if the model takes too long or the event drops, force the site to show after 8 seconds
+            setTimeout(() => {
+                modelViewer.classList.add('is-loaded');
+                dismissSplash();
+            }, 8000);
+        } else {
+            // Fallback if no model viewer is found
+            setTimeout(dismissSplash, 500);
+        }
 
-            // Hide the custom drag hint once the user interacts
-            const dragHint = document.getElementById('dragHint');
-            if (dragHint) {
-                modelViewer.addEventListener('camera-change', (event) => {
-                    if (event.detail.source === 'user-interaction') {
-                        dragHint.style.opacity = '0';
-                        dragHint.style.visibility = 'hidden';
-                    }
-                });
-            }
+        // Hide the custom drag hint once the user interacts
+        const dragHint = document.getElementById('dragHint');
+        if (dragHint) {
+            modelViewer.addEventListener('camera-change', (event) => {
+                if (event.detail.source === 'user-interaction') {
+                    dragHint.style.opacity = '0';
+                    dragHint.style.visibility = 'hidden';
+                }
+            });
         }
 
     } else {
