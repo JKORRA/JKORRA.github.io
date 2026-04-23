@@ -270,6 +270,17 @@ document.addEventListener("DOMContentLoaded", function() {
             
             // Failsafe: if event drops, force show after a long wait
             setTimeout(() => modelViewer.classList.add('is-loaded'), 12000);
+
+            // Hide the custom drag hint once the user interacts
+            const dragHint = document.getElementById('dragHint');
+            if (dragHint) {
+                modelViewer.addEventListener('camera-change', (event) => {
+                    if (event.detail.source === 'user-interaction') {
+                        dragHint.style.opacity = '0';
+                        dragHint.style.visibility = 'hidden';
+                    }
+                });
+            }
         }
 
     } else {
