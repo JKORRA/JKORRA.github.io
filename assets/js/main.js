@@ -192,6 +192,11 @@ document.addEventListener("DOMContentLoaded", function() {
         scene = new THREE.Scene();
         
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        // Adjust FOV for portrait (mobile) so clouds aren't zoomed in
+        if (camera.aspect < 1) {
+            camera.fov = 60 / camera.aspect;
+            camera.updateProjectionMatrix();
+        }
         camera.position.set(0, 0, 50);
 
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -237,6 +242,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
+            if (camera.aspect < 1) {
+                camera.fov = 60 / camera.aspect;
+            } else {
+                camera.fov = 60;
+            }
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
