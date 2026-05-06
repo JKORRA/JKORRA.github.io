@@ -199,8 +199,18 @@ document.addEventListener("DOMContentLoaded", function() {
         camera.position.set(0, 0, 50);
 
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Size renderer based on container's actual dimensions (fixes mobile viewport gaps)
+        const rect = bgCanvasContainer.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height);
+
+        // Ensure canvas fills container exactly
+        renderer.domElement.style.position = 'absolute';
+        renderer.domElement.style.top = '0';
+        renderer.domElement.style.left = '0';
+        renderer.domElement.style.width = '100%';
+        renderer.domElement.style.height = '100%';
         
         bgCanvasContainer.appendChild(renderer.domElement);
 
@@ -240,21 +250,25 @@ document.addEventListener("DOMContentLoaded", function() {
         animateFrame();
 
         function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const rect = bgCanvasContainer.getBoundingClientRect();
+            
+            camera.aspect = rect.width / rect.height;
             if (camera.aspect < 1) {
               camera.fov = 60 / camera.aspect;
             } else {
               camera.fov = 60;
             }
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            renderer.setSize(rect.width, rect.height);
         }
         window.addEventListener('resize', onWindowResize, false);
 
         // Handle mobile address bar show/hide without resize event
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                const rect = bgCanvasContainer.getBoundingClientRect();
+                renderer.setSize(rect.width, rect.height);
             });
         }
 
