@@ -250,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function() {
         animateFrame();
 
         function onWindowResize() {
+            if (!document.body.contains(bgCanvasContainer)) return;
             const rect = bgCanvasContainer.getBoundingClientRect();
             
             camera.aspect = rect.width / rect.height;
@@ -267,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Handle mobile address bar show/hide without resize event
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
+                if (!document.body.contains(bgCanvasContainer)) return;
                 const rect = bgCanvasContainer.getBoundingClientRect();
                 renderer.setSize(rect.width, rect.height);
             });
@@ -286,6 +288,18 @@ document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 flyThroughActive = false;
                 startTyping();
+                
+                // Smoothly fade out the canvas to reveal the navy-blue background
+                bgCanvasContainer.style.opacity = '0';
+                
+                // Once faded out, completely destroy the background to save resources
+                setTimeout(() => {
+                    cancelAnimationFrame(splashReqId);
+                    if (renderer) renderer.dispose();
+                    if (bgCanvasContainer && bgCanvasContainer.parentNode) {
+                        bgCanvasContainer.remove();
+                    }
+                }, 1000);
             }, 1000); 
         }
 
