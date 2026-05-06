@@ -251,6 +251,13 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         window.addEventListener('resize', onWindowResize, false);
 
+        // Handle mobile address bar show/hide without resize event
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
         let dismissed = false;
         function dismissSplash() {
             if (dismissed) return;

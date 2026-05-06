@@ -39,7 +39,7 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     max-width: 100%;
-    min-height: 100%;
+    min-height: 100dvh;
     position: relative;
   }
 
@@ -297,14 +297,11 @@
     top: 0;
     left: 0;
     width: 100%;
-    /* Changed from 100vw to avoid scrollbar stretching */
-    height: 100%;
-    /* Changed from 100vh */
+    height: 100dvh;
     z-index: -1;
     pointer-events: none;
     background: #000000;
     overflow: hidden;
-    /* CRITICAL: Stops the canvas from expanding the page */
   }
 
   #bgCanvasContainer canvas {
