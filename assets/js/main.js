@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Initialize Scene
         scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a192f);
         
         camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         if (camera.aspect < 1) {
@@ -200,6 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0x0a192f, 1);
 
         renderer.setSize(window.innerWidth, window.innerHeight);
 
