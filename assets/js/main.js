@@ -201,9 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Size renderer based on container's actual dimensions (fixes mobile viewport gaps)
-        const rect = bgCanvasContainer.getBoundingClientRect();
-        renderer.setSize(rect.width, rect.height);
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
         // Ensure canvas fills container exactly
         renderer.domElement.style.position = 'absolute';
@@ -214,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         bgCanvasContainer.appendChild(renderer.domElement);
 
-        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 400 });
+        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
         cloudSystem.generate(88);
 
         let dismissed = false;
@@ -264,23 +262,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function onWindowResize() {
             if (!document.body.contains(bgCanvasContainer)) return;
-            const rect = bgCanvasContainer.getBoundingClientRect();
-            camera.aspect = rect.width / rect.height;
+            camera.aspect = window.innerWidth / window.innerHeight;
             if (camera.aspect < 1) {
                 camera.fov = 60 / camera.aspect;
             } else {
                 camera.fov = 60;
             }
             camera.updateProjectionMatrix();
-            renderer.setSize(rect.width, rect.height);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
         window.addEventListener('resize', onWindowResize, false);
 
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
                 if (!document.body.contains(bgCanvasContainer)) return;
-                const rect = bgCanvasContainer.getBoundingClientRect();
-                renderer.setSize(rect.width, rect.height);
+                renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
 
