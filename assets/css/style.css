@@ -285,29 +285,6 @@
     outline: none;
   }
 
-  /* --- SPLASH OVERLAY (Three.js Clouds) --- */
-  #splashOverlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 9999;
-    pointer-events: none;
-    background: var(--apple-bg);
-    overflow: hidden;
-    transition: opacity 1.2s ease;
-  }
-
-  #splashOverlay.exit {
-    opacity: 0;
-  }
-
-  #splashOverlay canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-    outline: none;
-  }
-
   /* Base opacity transitions so content can fade in smoothly */
   .header,
   .main-container {

@@ -92,6 +92,21 @@ document.addEventListener("DOMContentLoaded", function() {
         }, { capture: true });
     }
 
+    if (splashOverlay) {
+        Object.assign(splashOverlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: window.innerWidth + 'px',
+            height: window.innerHeight + 'px',
+            zIndex: '9999',
+            pointerEvents: 'none',
+            background: '#0a192f',
+            overflow: 'hidden',
+            transition: 'opacity 1.2s ease'
+        });
+    }
+
     let splashActive = splashOverlay !== null;
     let splashReqId, scene, camera, renderer, cloudSystem;
 
@@ -204,14 +219,6 @@ document.addEventListener("DOMContentLoaded", function() {
         renderer.setClearColor(0x0a192f, 1);
 
         renderer.setSize(window.innerWidth, window.innerHeight);
-
-        // Ensure canvas fills container exactly
-        renderer.domElement.style.position = 'absolute';
-        renderer.domElement.style.top = '0';
-        renderer.domElement.style.left = '0';
-        renderer.domElement.style.width = '100%';
-        renderer.domElement.style.height = '100%';
-        
         splashOverlay.appendChild(renderer.domElement);
 
         cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
@@ -246,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const hideStyle = document.getElementById('splash-hide-style');
                     if (hideStyle) hideStyle.remove();
                     startTyping();
-                    splashOverlay.classList.add('exit');
+                    splashOverlay.style.opacity = '0';
 
                     setTimeout(() => {
                         cancelAnimationFrame(splashReqId);
@@ -264,6 +271,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function onWindowResize() {
             if (!document.body.contains(splashOverlay)) return;
+            splashOverlay.style.width = window.innerWidth + 'px';
+            splashOverlay.style.height = window.innerHeight + 'px';
             camera.aspect = window.innerWidth / window.innerHeight;
             if (camera.aspect < 1) {
                 camera.fov = 60 / camera.aspect;
@@ -278,6 +287,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
                 if (!document.body.contains(splashOverlay)) return;
+                splashOverlay.style.width = window.innerWidth + 'px';
+                splashOverlay.style.height = window.innerHeight + 'px';
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
