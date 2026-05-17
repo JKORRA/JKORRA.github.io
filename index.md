@@ -1,6 +1,5 @@
 ---
 layout: home
-title: Jacopo Corrao
 ---
 
 <div class="main-container" id="main-content">
