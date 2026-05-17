@@ -23,10 +23,7 @@
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
-    max-width: 100%;
-    position: relative;
-    background-color: var(--apple-bg); /* Prevents rubber-band black/gray bars */
+    background-color: var(--apple-bg);
   }
 
   body {
@@ -37,9 +34,7 @@
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
-    max-width: 100%;
     min-height: 100dvh;
-    position: relative;
   }
 
   a {
@@ -291,10 +286,10 @@
   }
 
   /* --- SPLASH OVERLAY (Three.js Clouds) --- */
-  #bgCanvasContainer {
+  #splashOverlay {
     position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100vw; height: 100vh;
     z-index: 9999;
     pointer-events: none;
     background: var(--apple-bg);
@@ -302,13 +297,12 @@
     transition: opacity 1.2s ease;
   }
 
-  #bgCanvasContainer.exit {
+  #splashOverlay.exit {
     opacity: 0;
   }
 
-  #bgCanvasContainer canvas {
+  #splashOverlay canvas {
     display: block;
-    /* CRITICAL: Removes the invisible 4px gap under the canvas */
     width: 100% !important;
     height: 100% !important;
     outline: none;

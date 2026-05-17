@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- A2. 3D MODEL VIEWER + PERSISTENT BACKGROUND (Three.js Procedural Clouds) ---
     const modelViewer = document.querySelector('model-viewer');
     const meshWrapper = document.querySelector('.mesh-wrapper');
-    const bgCanvasContainer = document.getElementById('bgCanvasContainer');
+    const splashOverlay = document.getElementById('splashOverlay');
 
     if (meshWrapper) {
         // Block wheel zoom — only drag-to-rotate allowed
@@ -92,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }, { capture: true });
     }
 
-    let bgLayerActive = bgCanvasContainer !== null;
+    let splashActive = splashOverlay !== null;
     let splashReqId, scene, camera, renderer, cloudSystem;
 
-    if (bgLayerActive && typeof THREE !== 'undefined') {
+    if (splashActive && typeof THREE !== 'undefined') {
         // Billboard Cloud System customized for dark/mysterious look
         class BillboardCloudSystem {
             constructor(scene, camera, options = {}) {
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         camera.position.set(0, 0, 50);
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setClearColor(0x0a192f, 1);
 
@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
         renderer.domElement.style.width = '100%';
         renderer.domElement.style.height = '100%';
         
-        bgCanvasContainer.appendChild(renderer.domElement);
+        splashOverlay.appendChild(renderer.domElement);
 
         cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
         cloudSystem.generate(88);
@@ -246,13 +246,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     const hideStyle = document.getElementById('splash-hide-style');
                     if (hideStyle) hideStyle.remove();
                     startTyping();
-                    bgCanvasContainer.classList.add('exit');
+                    splashOverlay.classList.add('exit');
 
                     setTimeout(() => {
                         cancelAnimationFrame(splashReqId);
                         if (renderer) renderer.dispose();
-                        if (bgCanvasContainer && bgCanvasContainer.parentNode) {
-                            bgCanvasContainer.remove();
+                        if (splashOverlay && splashOverlay.parentNode) {
+                            splashOverlay.remove();
                         }
                     }, 1200);
                 }
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
         animateFrame();
 
         function onWindowResize() {
-            if (!document.body.contains(bgCanvasContainer)) return;
+            if (!document.body.contains(splashOverlay)) return;
             camera.aspect = window.innerWidth / window.innerHeight;
             if (camera.aspect < 1) {
                 camera.fov = 60 / camera.aspect;
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
-                if (!document.body.contains(bgCanvasContainer)) return;
+                if (!document.body.contains(splashOverlay)) return;
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
