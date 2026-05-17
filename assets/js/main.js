@@ -214,34 +214,47 @@ document.addEventListener("DOMContentLoaded", function() {
         
         bgCanvasContainer.appendChild(renderer.domElement);
 
-        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
+        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 400 });
         cloudSystem.generate(88);
 
+        let dismissed = false;
         let flyThroughActive = false;
-        let flySpeed = 0;
-        let isDecelerating = false;
+        let splashRevealed = false;
+        let flyStartTime = 0;
 
         const clock = new THREE.Clock();
         function animateFrame() {
             splashReqId = requestAnimationFrame(animateFrame);
-            
-            const t = clock.getElapsedTime();
-            cloudSystem.update(t, 2.5); 
-            
-            if (flyThroughActive) {
-                if (!isDecelerating) {
-                    flySpeed += 0.02;
-                    if (flySpeed > 0.8) isDecelerating = true;
-                } else {
-                    flySpeed *= 0.95; // ease out
-                    if (flySpeed < 0.01) flySpeed = 0; 
-                }
 
-                camera.position.z -= flySpeed;
-                
-                // Add a subtle rotation tilt to simulate diving speed
-                if (flySpeed > 0) {
-                    camera.rotation.z += 0.0005 * flySpeed;
+            cloudSystem.update(clock.getElapsedTime(), 2.5);
+
+            if (flyThroughActive) {
+                const elapsed = (Date.now() - flyStartTime) / 1000;
+                const progress = Math.min(elapsed / 2.0, 1);
+
+                const t = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                camera.position.z = 50 - t * 200;
+                camera.rotation.z = t * 0.03;
+
+                if (progress >= 1 && !splashRevealed) {
+                    splashRevealed = true;
+                    flyThroughActive = false;
+
+                    const hideStyle = document.getElementById('splash-hide-style');
+                    if (hideStyle) hideStyle.remove();
+                    startTyping();
+                    bgCanvasContainer.classList.add('exit');
+
+                    setTimeout(() => {
+                        cancelAnimationFrame(splashReqId);
+                        if (renderer) renderer.dispose();
+                        if (bgCanvasContainer && bgCanvasContainer.parentNode) {
+                            bgCanvasContainer.remove();
+                        }
+                    }, 1200);
                 }
             }
 
@@ -252,20 +265,17 @@ document.addEventListener("DOMContentLoaded", function() {
         function onWindowResize() {
             if (!document.body.contains(bgCanvasContainer)) return;
             const rect = bgCanvasContainer.getBoundingClientRect();
-            
             camera.aspect = rect.width / rect.height;
             if (camera.aspect < 1) {
-              camera.fov = 60 / camera.aspect;
+                camera.fov = 60 / camera.aspect;
             } else {
-              camera.fov = 60;
+                camera.fov = 60;
             }
             camera.updateProjectionMatrix();
-            
             renderer.setSize(rect.width, rect.height);
         }
         window.addEventListener('resize', onWindowResize, false);
 
-        // Handle mobile address bar show/hide without resize event
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
                 if (!document.body.contains(bgCanvasContainer)) return;
@@ -274,53 +284,26 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
 
-        let dismissed = false;
         function dismissSplash() {
             if (dismissed) return;
             dismissed = true;
-            
+            flyStartTime = Date.now();
             flyThroughActive = true;
-            
-            // Fade in the portfolio correctly over the z-index -1 clouds
-            const hideStyle = document.getElementById('splash-hide-style');
-            if (hideStyle) hideStyle.remove();
-            
-            setTimeout(() => {
-                flyThroughActive = false;
-                startTyping();
-                
-                // Smoothly fade out the canvas to reveal the navy-blue background
-                bgCanvasContainer.style.opacity = '0';
-                
-                // Once faded out, completely destroy the background to save resources
-                setTimeout(() => {
-                    cancelAnimationFrame(splashReqId);
-                    if (renderer) renderer.dispose();
-                    if (bgCanvasContainer && bgCanvasContainer.parentNode) {
-                        bgCanvasContainer.remove();
-                    }
-                }, 1000);
-            }, 1000); 
         }
 
-        // Wait for the heavy 3D model to fully load before dismissing the splash screen
         if (modelViewer) {
             modelViewer.addEventListener('load', () => {
                 modelViewer.classList.add('is-loaded');
                 dismissSplash();
             });
-            
-            // Failsafe: if the model takes too long or the event drops, force the site to show after 8 seconds
             setTimeout(() => {
                 modelViewer.classList.add('is-loaded');
                 dismissSplash();
             }, 8000);
         } else {
-            // Fallback if no model viewer is found
             setTimeout(dismissSplash, 500);
         }
 
-        // Hide the custom drag hint once the user interacts
         const dragHint = document.getElementById('dragHint');
         if (dragHint) {
             modelViewer.addEventListener('camera-change', (event) => {
@@ -332,14 +315,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
     } else {
-        // Lightweight Fallback
-        const splashScreen = document.getElementById('splashScreen');
-        if (splashScreen) {
-            splashScreen.classList.add('exit');
-            setTimeout(() => { splashScreen.remove(); startTyping(); }, 1000);
-        } else {
-            startTyping();
-        }
+        const hideStyle = document.getElementById('splash-hide-style');
+        if (hideStyle) hideStyle.remove();
+        startTyping();
     }
 
 
