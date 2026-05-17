@@ -80,293 +80,43 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(type, 200);
     }
 
-    // --- A2. 3D MODEL VIEWER + PERSISTENT BACKGROUND (Three.js Procedural Clouds) ---
+    // --- A2. 3D MODEL VIEWER + CONTENT REVEAL ---
     const modelViewer = document.querySelector('model-viewer');
     const meshWrapper = document.querySelector('.mesh-wrapper');
-    const splashOverlay = document.getElementById('splashOverlay');
 
     if (meshWrapper) {
-        // Block wheel zoom — only drag-to-rotate allowed
         meshWrapper.addEventListener('wheel', function(e) {
             e.stopPropagation();
         }, { capture: true });
     }
 
-    // Helper: get true viewport dimensions (accounting for mobile dynamic toolbars)
-    function getViewportDims() {
-        return {
-            width: window.visualViewport?.width ?? window.innerWidth,
-            height: window.visualViewport?.height ?? window.innerHeight
-        };
-    }
-
-    if (splashOverlay) {
-        const vp = getViewportDims();
-        Object.assign(splashOverlay.style, {
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            width: vp.width + 'px',
-            height: vp.height + 'px',
-            zIndex: '9999',
-            pointerEvents: 'none',
-            background: '#0a192f',
-            overflow: 'hidden',
-            transition: 'opacity 1.2s ease'
-        });
-    }
-
-    let splashActive = splashOverlay !== null;
-    let splashReqId, scene, camera, renderer, cloudSystem;
-
-    if (splashActive && typeof THREE !== 'undefined') {
-        // Billboard Cloud System customized for dark/mysterious look
-        class BillboardCloudSystem {
-            constructor(scene, camera, options = {}) {
-                this.scene = scene;
-                this.camera = camera;
-                this.count = options.count ?? 60; // Slightly more clouds for density
-                
-                // Make the spawn area MASSIVE so you never see the edges
-                this.spreadX = options.spreadX ?? 1000; 
-                this.spreadZ = options.spreadZ ?? 400;  
-                
-                this.clouds = [];
-            }
-
-            generate() {
-                const texture = this._generateCloudTexture(512);
-
-                for (let i = 0; i < this.count; i++) {
-                    const material = new THREE.SpriteMaterial({
-                        map: texture,
-                        transparent: true,
-                        // Random opacity between 0.1 and 0.4
-                        opacity: Math.random() * 0.3 + 0.1, 
-                        depthWrite: false,
-                        color: new THREE.Color().setHSL(0.65, 0.25, Math.random() * 0.1 + 0.12),
-                        blending: THREE.NormalBlending
-                    });
-
-                    const sprite = new THREE.Sprite(material);
-                    
-                    // Randomly scale the clouds so some are huge and some are medium
-                    const scale = Math.random() * 200 + 200;
-                    sprite.scale.set(scale, scale * 0.7, 1);
-
-                    // Initial random placement
-                    this.recycleCloud(sprite, true);
-                    
-                    material.rotation = Math.random() * Math.PI * 2;
-                    
-                    this.scene.add(sprite);
-                    this.clouds.push({ sprite, rotSpeed: (Math.random() - 0.5) * 0.002 });
-                }
-            }
-
-            // Helper function to reset clouds cleanly
-            recycleCloud(sprite, isInit = false) {
-                // Spread widely across the X axis
-                sprite.position.x = (Math.random() - 0.5) * this.spreadX;
-                // Keep them roughly vertically centered
-                sprite.position.y = (Math.random() - 0.5) * 120;
-                
-                // If initializing, scatter them everywhere on Z. 
-                // If recycling during animation, put them at the very back of the scene.
-                sprite.position.z = isInit ? (Math.random() - 0.5) * this.spreadZ : -this.spreadZ / 2;
-            }
-
-            _generateCloudTexture(size) {
-                // Your texture generation remains exactly the same! It was perfect.
-                const canvas = document.createElement('canvas');
-                canvas.width = canvas.height = size;
-                const ctx = canvas.getContext('2d');
-                const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-                grad.addColorStop(0, 'rgba(255,255,255,0.8)');
-                grad.addColorStop(0.4, 'rgba(255,255,255,0.4)');
-                grad.addColorStop(0.7, 'rgba(255,255,255,0.1)');
-                grad.addColorStop(1, 'rgba(255,255,255,0)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, size, size);
-                const tex = new THREE.CanvasTexture(canvas);
-                tex.needsUpdate = true;
-                return tex;
-            }
-
-            update(time, windSpeed = 5) {
-                const camZ = this.camera.position.z;
-                
-                for (const cloud of this.clouds) {
-                    // Drift right, slowly drift up/down, and move towards the camera
-                    cloud.sprite.position.x += windSpeed * 0.02;
-                    cloud.sprite.position.y += Math.sin(time * 0.5 + cloud.sprite.id) * 0.02;
-                    cloud.sprite.position.z += windSpeed * 0.05; 
-                    cloud.sprite.material.rotation += cloud.rotSpeed;
-
-                    // THE FIX: Only recycle clouds when they pass completely behind the camera.
-                    // This prevents you from seeing them suddenly disappear on the right edge.
-                    if (cloud.sprite.position.z > camZ + 10) {
-                        this.recycleCloud(cloud.sprite, false);
-                    }
-                }
-            }
-        }
-
-        // Initialize Scene
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a192f);
-        
-        const vpCam = getViewportDims();
-        camera = new THREE.PerspectiveCamera(60, vpCam.width / vpCam.height, 0.1, 1000);
-        if (camera.aspect < 1) {
-          camera.fov = 60 / camera.aspect;
-          camera.updateProjectionMatrix();
-        }
-        camera.position.set(0, 0, 50);
-
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setClearColor(0x0a192f, 1);
-
-        const vpInit = getViewportDims();
-        renderer.setSize(vpInit.width, vpInit.height);
-        renderer.domElement.style.display = 'block';
-        renderer.domElement.style.position = 'absolute';
-        renderer.domElement.style.top = '0';
-        renderer.domElement.style.left = '0';
-        splashOverlay.appendChild(renderer.domElement);
-
-        cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
-        cloudSystem.generate(88);
-
-        // Diagnostic logging for mobile sizing
-        (function logSplashDims() {
-            const so = splashOverlay;
-            const ca = renderer.domElement;
-            const vp = getViewportDims();
-            console.log('=== SPLASH DIAGNOSTICS ===');
-            console.log('window.inner:', window.innerWidth, 'x', window.innerHeight);
-            console.log('visualViewport:', vp.width, 'x', vp.height);
-            console.log('screen:', screen.width, 'x', screen.height);
-            console.log('client (html):', document.documentElement.clientWidth, 'x', document.documentElement.clientHeight);
-            console.log('splashOverlay rect:', JSON.stringify(so.getBoundingClientRect()));
-            console.log('splashOverlay offset:', so.offsetWidth, 'x', so.offsetHeight);
-            console.log('canvas rect:', JSON.stringify(ca.getBoundingClientRect()));
-            console.log('canvas offset:', ca.offsetWidth, 'x', ca.offsetHeight);
-            console.log('canvas style:', ca.style.width, ca.style.height);
-            console.log('devicePixelRatio:', window.devicePixelRatio);
-            console.log('========================');
-        })();
-
-        let dismissed = false;
-        let flyThroughActive = false;
-        let splashRevealed = false;
-        let flyStartTime = 0;
-
-        const clock = new THREE.Clock();
-        function animateFrame() {
-            splashReqId = requestAnimationFrame(animateFrame);
-
-            cloudSystem.update(clock.getElapsedTime(), 2.5);
-
-            if (flyThroughActive) {
-                const elapsed = (Date.now() - flyStartTime) / 1000;
-                const progress = Math.min(elapsed / 2.0, 1);
-
-                const t = progress < 0.5
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-                camera.position.z = 50 - t * 200;
-                camera.rotation.z = t * 0.03;
-
-                if (progress >= 1 && !splashRevealed) {
-                    splashRevealed = true;
-                    flyThroughActive = false;
-
-                    const hideStyle = document.getElementById('splash-hide-style');
-                    if (hideStyle) hideStyle.remove();
-                    startTyping();
-                    splashOverlay.style.opacity = '0';
-
-                    setTimeout(() => {
-                        cancelAnimationFrame(splashReqId);
-                        if (renderer) renderer.dispose();
-                        if (splashOverlay && splashOverlay.parentNode) {
-                            splashOverlay.remove();
-                        }
-                    }, 1200);
-                }
-            }
-
-            renderer.render(scene, camera);
-        }
-        animateFrame();
-
-        function onWindowResize() {
-            if (!document.body.contains(splashOverlay)) return;
-            const vp = getViewportDims();
-            splashOverlay.style.width = vp.width + 'px';
-            splashOverlay.style.height = vp.height + 'px';
-            camera.aspect = vp.width / vp.height;
-            if (camera.aspect < 1) {
-                camera.fov = 60 / camera.aspect;
-            } else {
-                camera.fov = 60;
-            }
-            camera.updateProjectionMatrix();
-            renderer.setSize(vp.width, vp.height);
-            // Log resize diagnostics
-            console.log('resize -> vp:', vp.width, 'x', vp.height,
-                        'overlay:', splashOverlay.offsetWidth, 'x', splashOverlay.offsetHeight);
-        }
-        window.addEventListener('resize', onWindowResize, false);
-
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', () => {
-                if (!document.body.contains(splashOverlay)) return;
-                const vp = getViewportDims();
-                splashOverlay.style.width = vp.width + 'px';
-                splashOverlay.style.height = vp.height + 'px';
-                renderer.setSize(vp.width, vp.height);
-                console.log('visualViewport resize -> vp:', vp.width, 'x', vp.height);
-            });
-        }
-
-        function dismissSplash() {
-            if (dismissed) return;
-            dismissed = true;
-            flyStartTime = Date.now();
-            flyThroughActive = true;
-        }
-
-        if (modelViewer) {
-            modelViewer.addEventListener('load', () => {
-                modelViewer.classList.add('is-loaded');
-                dismissSplash();
-            });
-            setTimeout(() => {
-                modelViewer.classList.add('is-loaded');
-                dismissSplash();
-            }, 8000);
-        } else {
-            setTimeout(dismissSplash, 500);
-        }
-
-        const dragHint = document.getElementById('dragHint');
-        if (dragHint) {
-            modelViewer.addEventListener('camera-change', (event) => {
-                if (event.detail.source === 'user-interaction') {
-                    dragHint.style.opacity = '0';
-                    dragHint.style.visibility = 'hidden';
-                }
-            });
-        }
-
-    } else {
-        const hideStyle = document.getElementById('splash-hide-style');
+    function revealContent() {
+        const hideStyle = document.getElementById('init-hide-style');
         if (hideStyle) hideStyle.remove();
         startTyping();
+    }
+
+    if (modelViewer) {
+        modelViewer.addEventListener('load', () => {
+            modelViewer.classList.add('is-loaded');
+            revealContent();
+        });
+        setTimeout(() => {
+            modelViewer.classList.add('is-loaded');
+            revealContent();
+        }, 8000);
+    } else {
+        setTimeout(revealContent, 500);
+    }
+
+    const dragHint = document.getElementById('dragHint');
+    if (dragHint && modelViewer) {
+        modelViewer.addEventListener('camera-change', (event) => {
+            if (event.detail.source === 'user-interaction') {
+                dragHint.style.opacity = '0';
+                dragHint.style.visibility = 'hidden';
+            }
+        });
     }
 
 
