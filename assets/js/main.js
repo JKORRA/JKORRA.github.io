@@ -92,13 +92,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }, { capture: true });
     }
 
+    // Helper: get true viewport dimensions (accounting for mobile dynamic toolbars)
+    function getViewportDims() {
+        return {
+            width: window.visualViewport?.width ?? window.innerWidth,
+            height: window.visualViewport?.height ?? window.innerHeight
+        };
+    }
+
     if (splashOverlay) {
+        const vp = getViewportDims();
         Object.assign(splashOverlay.style, {
             position: 'fixed',
             top: '0',
             left: '0',
-            width: window.innerWidth + 'px',
-            height: window.innerHeight + 'px',
+            width: vp.width + 'px',
+            height: vp.height + 'px',
             zIndex: '9999',
             pointerEvents: 'none',
             background: '#0a192f',
@@ -207,7 +216,8 @@ document.addEventListener("DOMContentLoaded", function() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0a192f);
         
-        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const vpCam = getViewportDims();
+        camera = new THREE.PerspectiveCamera(60, vpCam.width / vpCam.height, 0.1, 1000);
         if (camera.aspect < 1) {
           camera.fov = 60 / camera.aspect;
           camera.updateProjectionMatrix();
@@ -218,11 +228,35 @@ document.addEventListener("DOMContentLoaded", function() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setClearColor(0x0a192f, 1);
 
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        const vpInit = getViewportDims();
+        renderer.setSize(vpInit.width, vpInit.height);
+        renderer.domElement.style.display = 'block';
+        renderer.domElement.style.position = 'absolute';
+        renderer.domElement.style.top = '0';
+        renderer.domElement.style.left = '0';
         splashOverlay.appendChild(renderer.domElement);
 
         cloudSystem = new BillboardCloudSystem(scene, camera, { count: 200});
         cloudSystem.generate(88);
+
+        // Diagnostic logging for mobile sizing
+        (function logSplashDims() {
+            const so = splashOverlay;
+            const ca = renderer.domElement;
+            const vp = getViewportDims();
+            console.log('=== SPLASH DIAGNOSTICS ===');
+            console.log('window.inner:', window.innerWidth, 'x', window.innerHeight);
+            console.log('visualViewport:', vp.width, 'x', vp.height);
+            console.log('screen:', screen.width, 'x', screen.height);
+            console.log('client (html):', document.documentElement.clientWidth, 'x', document.documentElement.clientHeight);
+            console.log('splashOverlay rect:', JSON.stringify(so.getBoundingClientRect()));
+            console.log('splashOverlay offset:', so.offsetWidth, 'x', so.offsetHeight);
+            console.log('canvas rect:', JSON.stringify(ca.getBoundingClientRect()));
+            console.log('canvas offset:', ca.offsetWidth, 'x', ca.offsetHeight);
+            console.log('canvas style:', ca.style.width, ca.style.height);
+            console.log('devicePixelRatio:', window.devicePixelRatio);
+            console.log('========================');
+        })();
 
         let dismissed = false;
         let flyThroughActive = false;
@@ -271,25 +305,31 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function onWindowResize() {
             if (!document.body.contains(splashOverlay)) return;
-            splashOverlay.style.width = window.innerWidth + 'px';
-            splashOverlay.style.height = window.innerHeight + 'px';
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const vp = getViewportDims();
+            splashOverlay.style.width = vp.width + 'px';
+            splashOverlay.style.height = vp.height + 'px';
+            camera.aspect = vp.width / vp.height;
             if (camera.aspect < 1) {
                 camera.fov = 60 / camera.aspect;
             } else {
                 camera.fov = 60;
             }
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(vp.width, vp.height);
+            // Log resize diagnostics
+            console.log('resize -> vp:', vp.width, 'x', vp.height,
+                        'overlay:', splashOverlay.offsetWidth, 'x', splashOverlay.offsetHeight);
         }
         window.addEventListener('resize', onWindowResize, false);
 
         if (window.visualViewport) {
             window.visualViewport.addEventListener('resize', () => {
                 if (!document.body.contains(splashOverlay)) return;
-                splashOverlay.style.width = window.innerWidth + 'px';
-                splashOverlay.style.height = window.innerHeight + 'px';
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                const vp = getViewportDims();
+                splashOverlay.style.width = vp.width + 'px';
+                splashOverlay.style.height = vp.height + 'px';
+                renderer.setSize(vp.width, vp.height);
+                console.log('visualViewport resize -> vp:', vp.width, 'x', vp.height);
             });
         }
 
