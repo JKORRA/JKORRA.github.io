@@ -28,15 +28,15 @@ layout: home
     </a>
   </div>
 
-  <section id="about" class="about-scroll-section reveal">
-    <div class="mesh-wrapper">
+  <section id="about" class="about-scroll-section">
+    <div class="mesh-wrapper reveal-right">
       <div class="drag-hint" id="dragHint">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 13"/></svg>
         Drag ↔ to rotate
       </div>
         <model-viewer src="assets/models/avatar.glb" camera-controls touch-action="pan-y" disable-zoom disable-pan shadow-intensity="1" exposure="1" environment-image="neutral" aria-label="3D avatar of Jacopo Corrao"></model-viewer>
     </div>
-    <div class="about-content">
+    <div class="about-content reveal-left">
       <h2>About Me</h2>
       <p class="about-text">
         My fascination with technology began in <strong>middle school</strong>. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.

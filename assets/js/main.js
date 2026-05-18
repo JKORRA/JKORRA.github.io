@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function initScrollReveal() {
-        const revealEls = document.querySelectorAll('.reveal');
+        const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
         if (revealEls.length === 0) return;
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -120,15 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-        revealEls.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            const inViewport = rect.top < window.innerHeight - 40 && rect.bottom > 0;
-            if (inViewport) {
-                el.classList.add('visible');
-            } else {
-                observer.observe(el);
-            }
-        });
+        revealEls.forEach(el => observer.observe(el));
     }
 
     initLazyModelViewer();
