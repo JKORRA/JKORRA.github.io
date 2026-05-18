@@ -191,6 +191,34 @@ layout: home
         </div>
         <a href="#" class="hidden-link"></a>
       </div>
+
+      <div class="card project-card clickable" onclick="openModal(this)">
+        <svg class="card-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        <div style="flex-grow: 1;">
+            <h3>Voice2Knowledge</h3>
+            <p>Voice2Knowledge is a desktop application that transcribes audio files (perfect for work calls, lectures, meetings) into text using local AI. All processing happens on your device &mdash; your audio never leaves your computer.</p>
+        </div>
+        <div class="card-footer">
+            <div class="tech-stack">
+                <span class="badge">Speech-to-Text</span>
+                <span class="badge">Local LLM</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">React</span>
+            </div>
+        </div>
+        <div class="long-description">
+            <p>Voice2Knowledge is a privacy-first desktop application developed as a personal project. The goal is simple yet powerful: transcribe audio files into text using on-device artificial intelligence, with zero data leaving your machine. Beyond transcription, it lets you chat with your transcripts using a local LLM, keeping everything private.</p>
+            <p><strong>Highlights:</strong></p>
+            <ul>
+                <li>Developed as a cross-platform desktop application (Windows, macOS, Linux)</li>
+                <li>Runs entirely offline &mdash; no internet connection or cloud service required</li>
+                <li>Uses optimized Whisper models via faster-whisper for fast, accurate transcription</li>
+                <li>Integrated local LLM for post-transcription Q&amp;A</li>
+            </ul>
+            <p>Built with FastAPI, React, TypeScript, and packaged as a single executable via PyInstaller.</p>
+        </div>
+        <a href="https://github.com/JKORRA/Voice2Knowledge" class="hidden-link">View Source Code</a>
+      </div>
     </div>
   </section>
 
