@@ -118,13 +118,45 @@ document.addEventListener("DOMContentLoaded", function() {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
         revealEls.forEach(el => observer.observe(el));
     }
 
-    initLazyModelViewer();
-    initLazyD3();
+    function initActiveNav() {
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = [];
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                const section = document.querySelector(href);
+                if (section) sections.push(section);
+            }
+        });
+
+        if (sections.length === 0) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            let activeId = null;
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    activeId = entry.target.id;
+                }
+            });
+
+            if (activeId) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + activeId);
+                });
+            }
+        }, { threshold: 0.3, rootMargin: '-80px 0px -20% 0px' });
+
+        sections.forEach(s => observer.observe(s));
+    }
+
+        initActiveNav();
+        initLazyModelViewer();
+        initLazyD3();
 
     function initLazyModelViewer() {
         const aboutSection = document.querySelector('.about-scroll-section');

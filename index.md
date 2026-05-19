@@ -2,9 +2,8 @@
 layout: home
 ---
 
-<div class="main-container" id="main-content">
-
-  <div class="nav-header">
+<div class="nav-header">
+  <div class="nav-inner">
     <div class="nav-name">Jacopo Corrao</div>
     <div class="nav-links">
       <a href="#about">About</a>
@@ -15,6 +14,9 @@ layout: home
       <a href="#contact">Contact</a>
     </div>
   </div>
+</div>
+
+<div class="main-container" id="main-content">
 
   <div class="hero">
     <div>

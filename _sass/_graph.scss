@@ -1,0 +1,102 @@
+.graph-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 600px;
+  background: rgba(44, 44, 46, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  margin: 0 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--card-radius);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#d3-graph-container {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+#d3-graph-container:active {
+  cursor: grabbing;
+}
+
+.link-base {
+  stroke: #444;
+  stroke-width: 2px;
+  stroke-opacity: 0.3;
+}
+
+.link-flow {
+  fill: none;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-dasharray: 6 10;
+  animation: flowAnimation 2s linear infinite;
+  stroke-opacity: 0.8;
+}
+
+@keyframes flowAnimation {
+  from { stroke-dashoffset: 32; }
+  to { stroke-dashoffset: 0; }
+}
+
+.node circle {
+  fill: #2c2c2e;
+  stroke-width: 2px;
+  transition: all 0.3s var(--spring-easing);
+}
+
+.node text {
+  font-family: -apple-system, "SF Pro Text", sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+  fill: #ffffff;
+  font-size: 13px;
+  opacity: 1;
+  transition: all 0.3s var(--smooth-easing);
+}
+
+.graph-wrapper.has-active .node:not(.active):not(.neighbor) circle {
+  opacity: 0.3;
+}
+.graph-wrapper.has-active .node:not(.active):not(.neighbor) text {
+  opacity: 0.3;
+}
+.graph-wrapper.has-active .link-base {
+  opacity: 0.1;
+}
+.graph-wrapper.has-active .link-flow {
+  opacity: 0.1;
+}
+
+.node.active circle,
+.node:hover circle {
+  opacity: 1 !important;
+  fill: #2c2c2e;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 15px currentColor);
+  transform: scale(1.1);
+}
+
+.link-flow.active {
+  opacity: 1 !important;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 5px currentColor);
+  animation-duration: 0.5s;
+}
+
+.node.neighbor circle {
+  opacity: 1 !important;
+  stroke-width: 2px;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+@media (max-width: 768px) {
+  #d3-graph-container {
+    min-width: 1000px;
+  }
+}

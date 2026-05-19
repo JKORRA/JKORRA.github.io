@@ -1,0 +1,98 @@
+body {
+  color: var(--apple-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-optical-sizing: auto;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--apple-blue);
+  text-decoration: none;
+  transition: color 0.2s var(--smooth-easing);
+}
+
+.hero {
+  text-align: center;
+  padding: 120px 20px 80px;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-greeting {
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 1.05;
+}
+
+.cursor {
+  display: inline-block;
+  width: 4px;
+  height: clamp(3rem, 6vw, 5.5rem);
+  background-color: var(--apple-blue);
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  animation: blink 1s infinite;
+}
+
+.hero-subline {
+  font-size: 1.5rem;
+  color: var(--apple-subtext);
+  font-weight: 400;
+  max-width: 680px;
+  margin: 16px auto 0;
+  line-height: 1.5;
+}
+
+.scroll-indicator {
+  margin-top: 60px;
+  opacity: 0;
+  color: var(--apple-subtext);
+  cursor: pointer;
+  animation: fadeIn 1s ease-in forwards, bounce 2s infinite;
+  animation-delay: 2.5s, 2.5s;
+}
+
+h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--apple-subtext);
+  margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .hero-greeting {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+  .cursor {
+    height: clamp(2rem, 10vw, 3rem);
+  }
+  .hero-subline {
+    font-size: 1.2rem;
+  }
+  .hero {
+    min-height: 70vh;
+    padding: 100px 20px 40px;
+  }
+  h2 {
+    font-size: 1.8rem;
+    margin-top: 0;
+  }
+}
