@@ -136,20 +136,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (sections.length === 0) return;
 
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
         const observer = new IntersectionObserver((entries) => {
-            let activeId = null;
+            let bestEntry = null;
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    activeId = entry.target.id;
+                    if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+                        bestEntry = entry;
+                    }
                 }
             });
 
-            if (activeId) {
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === '#' + activeId);
-                });
-            }
-        }, { threshold: 0.3, rootMargin: '-80px 0px -20% 0px' });
+            const activeId = bestEntry ? bestEntry.target.id : null;
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === '#' + activeId);
+            });
+        }, { threshold: [0.1, 0.2, 0.3, 0.4, 0.5], rootMargin: '-80px 0px -20% 0px' });
 
         sections.forEach(s => observer.observe(s));
     }
