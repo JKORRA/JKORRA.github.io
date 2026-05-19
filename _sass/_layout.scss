@@ -36,6 +36,7 @@ body {
   top: 0;
   z-index: 100;
   width: 100%;
+  padding-top: env(safe-area-inset-top);
   background: rgba(29, 29, 31, 0.8);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
