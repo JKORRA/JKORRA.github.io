@@ -24,7 +24,7 @@ function openModal(cardElement) {
     if (linkUrl && linkUrl !== "#" && linkUrl !== "") {
         modalLinkContainer.style.display = 'block';
         modalLinkBtn.href = linkUrl;
-        modalLinkBtn.innerText = linkText + " \u2197";
+        modalLinkBtn.innerText = linkText;
     } else {
         modalLinkContainer.style.display = 'none';
     }

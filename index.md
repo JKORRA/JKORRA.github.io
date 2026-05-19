@@ -276,7 +276,7 @@ layout: home
         <span class="modal-subtitle" id="modalStack">Stack</span>
         <div class="modal-body" id="modalBody"></div>
         <div style="margin-top: 30px;" id="modalLinkContainer">
-            <a href="#" target="_blank" class="btn-modal" id="modalLinkBtn">View Project ↗</a>
+            <a href="#" target="_blank" class="btn-modal" id="modalLinkBtn">View Project</a>
         </div>
     </div>
 </div>
