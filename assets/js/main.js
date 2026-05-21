@@ -154,9 +154,33 @@ document.addEventListener("DOMContentLoaded", function() {
         sections.forEach(s => observer.observe(s));
     }
 
-        initActiveNav();
-        initLazyModelViewer();
-        initLazyD3();
+    function initSliverAppBar() {
+        const navHeader = document.querySelector('.nav-header');
+        if (!navHeader) return;
+
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 50) {
+                if (currentScrollY > lastScrollY) {
+                    navHeader.classList.add('nav-hidden');
+                } else {
+                    navHeader.classList.remove('nav-hidden');
+                }
+            } else {
+                navHeader.classList.remove('nav-hidden');
+            }
+            
+            lastScrollY = currentScrollY;
+        }, { passive: true });
+    }
+
+    initSliverAppBar();
+    initActiveNav();
+    initLazyModelViewer();
+    initLazyD3();
 
     function initLazyModelViewer() {
         const aboutSection = document.querySelector('.about-scroll-section');
