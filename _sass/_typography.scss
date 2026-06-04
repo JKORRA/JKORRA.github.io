@@ -64,6 +64,10 @@ a {
   line-height: 1.05;
 }
 
+.hero-greeting::before {
+  content: '\200B';
+}
+
 .cursor {
   display: inline-block;
   width: 4px;
@@ -79,12 +83,18 @@ a {
   color: var(--apple-subtext);
   font-weight: normal;
   max-width: 680px;
-  margin: 16px auto 0;
+  margin: 16px auto 80px;
   line-height: 1.5;
 }
 
 .scroll-indicator {
-  margin-top: 60px;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 24px;
   opacity: 0;
   color: var(--apple-subtext);
   cursor: pointer;
@@ -121,6 +131,7 @@ h2 {
 
   .hero-subline {
     font-size: 1.2rem;
+    margin-bottom: 0;
   }
 
   .hero {
