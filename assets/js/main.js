@@ -50,8 +50,6 @@ document.addEventListener("keydown", function(e) {
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    document.body.classList.add('js-enabled');
-
     const modelViewer = document.querySelector('model-viewer');
     const meshWrapper = document.querySelector('.mesh-wrapper');
 
@@ -71,15 +69,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (modelViewer) {
         modelViewer.addEventListener('load', () => {
             modelViewer.classList.add('is-loaded');
-            revealContent();
         });
-        setTimeout(() => {
-            modelViewer.classList.add('is-loaded');
-            revealContent();
-        }, 3000);
-    } else {
-        setTimeout(revealContent, 300);
     }
+
+    revealContent();
 
     const dragHint = document.getElementById('dragHint');
     if (dragHint && modelViewer) {
@@ -112,20 +105,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
         if (revealEls.length === 0) return;
 
-        const heroSection = document.querySelector('.hero');
-        if (heroSection) {
-            const heroObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        revealEls.forEach(el => {
-                            if (el.id === 'about') el.classList.remove('seen', 'visible');
-                        });
-                    }
-                });
-            }, { threshold: 0.1 });
-            heroObserver.observe(heroSection);
-        }
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.target.id !== 'about') {
@@ -141,9 +120,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const aboutSection = document.getElementById('about');
         if (aboutSection) {
+            let hasScrolled = false;
+            document.addEventListener('scroll', () => { hasScrolled = true; }, { once: true });
+
             const aboutObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        if (!hasScrolled) return;
                         if (!entry.target.classList.contains('seen')) {
                             entry.target.classList.add('seen');
                             requestAnimationFrame(() => {
@@ -224,30 +207,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     initSliverAppBar();
     initActiveNav();
-    initLazyModelViewer();
     initLazyD3();
-
-    function initLazyModelViewer() {
-        const aboutSection = document.querySelector('.about-scroll-section');
-        if (!aboutSection) return;
-
-        const script = document.querySelector('script[src*="model-viewer.min.js"]');
-        if (script) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const s = document.createElement('script');
-                    s.type = 'module';
-                    s.src = 'assets/js/model-viewer.min.js';
-                    document.head.appendChild(s);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { rootMargin: '200px' });
-
-        observer.observe(aboutSection);
-    }
 
     function initLazyD3() {
         const graphContainer = document.getElementById('d3-graph-container');

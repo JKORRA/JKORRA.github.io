@@ -11,7 +11,6 @@
   {%- seo -%}
 
   <link rel="icon" type="image/svg+xml" sizes="any" href="/assets/favicon.svg">
-  <link rel="icon" type="image/png" sizes="256x256" href="/assets/favicon.png">
   <link rel="icon" type="image/vnd.microsoft.icon" sizes="128x128 96x96 64x64 48x48 40x40 32x32 24x24 16x16" href="/favicon.ico">
   <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/assets/apple-touch-icon.png">
 
@@ -22,17 +21,22 @@
 
   <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
 
-  <style id="init-hide-style">
-    .main-container, .nav-header { opacity: 0; pointer-events: none; }
-    body { background-color: #1d1d1f; color: #f5f5f7; }
+  <link rel="preload" href="/assets/fonts/Sdfortimburtondemo-ALoW2.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    model-viewer:not(:defined) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
   </style>
 
-  <link rel="preload" href="/assets/fonts/Sdfortimburtondemo-ALoW2.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/models/avatar.glb" as="fetch" crossorigin="anonymous">
-
   {%- feed_meta -%}
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
+<script>document.body.classList.add('js-enabled');</script>
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   {{ content }}
