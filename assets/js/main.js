@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    const textToType = "Hi, I'm Jacopo !";
+    const textToType = "Hi, I'm Jacopo";
     const typingElement = document.getElementById("typing-text");
     let charIndex = 0;
     const typingSpeed = 100;
@@ -111,16 +111,61 @@ document.addEventListener("DOMContentLoaded", function() {
     function initScrollReveal() {
         const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
         if (revealEls.length === 0) return;
+
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            const heroObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        revealEls.forEach(el => {
+                            if (el.id === 'about') el.classList.remove('seen', 'visible');
+                        });
+                    }
+                });
+            }, { threshold: 0.1 });
+            heroObserver.observe(heroSection);
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
+                if (entry.isIntersecting && entry.target.id !== 'about') {
+                    if (!entry.target.classList.contains('seen')) {
+                        entry.target.classList.add('seen');
+                        requestAnimationFrame(() => {
+                            entry.target.classList.add('visible');
+                        });
+                    }
                 }
             });
-        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+        }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-        revealEls.forEach(el => observer.observe(el));
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            const aboutObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!entry.target.classList.contains('seen')) {
+                            entry.target.classList.add('seen');
+                            requestAnimationFrame(() => {
+                                entry.target.classList.add('visible');
+                            });
+                        } else {
+                            entry.target.classList.add('no-animate');
+                            void entry.target.offsetHeight;
+                            entry.target.classList.add('visible');
+                            entry.target.classList.remove('no-animate');
+                        }
+                    } else {
+                        entry.target.classList.remove('seen', 'visible');
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '300px 0px -30px 0px' });
+            aboutObserver.observe(aboutSection);
+        }
+
+        revealEls.forEach(el => {
+            if (el.id !== 'about') observer.observe(el);
+        });
     }
 
     function initActiveNav() {

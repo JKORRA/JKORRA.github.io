@@ -7,6 +7,10 @@ body.js-enabled .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
+body.js-enabled .about-scroll-section.reveal {
+  opacity: 1;
+  transform: none;
+}
 .reveal-delay-1 { transition-delay: 0.08s; }
 .reveal-delay-2 { transition-delay: 0.16s; }
 .reveal-delay-3 { transition-delay: 0.24s; }
@@ -31,6 +35,92 @@ body.js-enabled .reveal-right {
 body.js-enabled .reveal-right.visible {
   opacity: 1;
   transform: translateX(0);
+}
+
+body.js-enabled .no-animate,
+body.js-enabled .no-animate * {
+  transition: none !important;
+  animation: none !important;
+}
+
+body.js-enabled .about-scroll-section .about-header {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.5s var(--spring-easing), transform 0.5s var(--spring-easing);
+}
+body.js-enabled .about-scroll-section .about-content {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.5s var(--spring-easing), transform 0.5s var(--spring-easing);
+}
+body.js-enabled .about-scroll-section .mesh-wrapper {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.5s var(--spring-easing), transform 0.5s var(--spring-easing);
+}
+body.js-enabled .about-scroll-section.visible .about-header,
+body.js-enabled .about-scroll-section.visible .about-content,
+body.js-enabled .about-scroll-section.visible .mesh-wrapper {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+body.js-enabled .about-scroll-section .about-timeline li {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s var(--spring-easing), transform 0.3s var(--spring-easing), background 0.3s var(--smooth-easing);
+}
+body.js-enabled .about-scroll-section.visible .about-timeline li {
+  opacity: 1;
+  transform: translateX(0);
+}
+body.js-enabled .about-scroll-section.visible .about-timeline li:nth-child(1) { transition-delay: 0s; }
+body.js-enabled .about-scroll-section.visible .about-timeline li:nth-child(2) { transition-delay: 0.08s; }
+body.js-enabled .about-scroll-section.visible .about-timeline li:nth-child(3) { transition-delay: 0.16s; }
+body.js-enabled .about-scroll-section.visible .about-timeline li:nth-child(4) { transition-delay: 0.24s; }
+body.js-enabled .about-scroll-section.visible .about-timeline li:hover {
+  transition-delay: 0s !important;
+}
+
+body.js-enabled .featured-card {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.5s var(--spring-easing), transform 0.35s var(--spring-easing), border-color 0.3s var(--smooth-easing);
+}
+body.js-enabled .reveal.visible .featured-card {
+  opacity: 1;
+  transform: translateX(0);
+}
+body.js-enabled .reveal.visible .featured-card:hover {
+  transition-delay: 0s !important;
+}
+
+body.js-enabled .reveal .grid .card {
+  opacity: 0;
+  transition: opacity 0.5s var(--spring-easing), transform 0.35s var(--spring-easing), border-color 0.3s var(--smooth-easing), background 0.3s var(--smooth-easing), box-shadow 0.35s var(--spring-easing);
+}
+body.js-enabled .reveal .grid .card:nth-child(odd) {
+  transform: translateX(-30px);
+}
+body.js-enabled .reveal .grid .card:nth-child(even) {
+  transform: translateX(30px);
+}
+body.js-enabled .reveal.visible .grid .card {
+  opacity: 1;
+  transform: translateX(0);
+}
+body.js-enabled .reveal .grid .card:nth-child(1) { transition-delay: 0s; }
+body.js-enabled .reveal .grid .card:nth-child(2) { transition-delay: 0.08s; }
+body.js-enabled .reveal .grid .card:nth-child(3) { transition-delay: 0.16s; }
+body.js-enabled .reveal .grid .card:nth-child(4) { transition-delay: 0.24s; }
+body.js-enabled .reveal.visible .grid .card:hover {
+  transition-delay: 0s !important;
+}
+
+@media (max-width: 768px) {
+  body.js-enabled .reveal .grid .card {
+    transform: translateX(-30px);
+  }
 }
 
 @keyframes blink {

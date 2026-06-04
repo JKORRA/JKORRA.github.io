@@ -4,7 +4,7 @@ layout: home
 
 <div class="nav-header">
   <div class="nav-inner">
-    <div class="nav-name">Jacopo Corrao</div>
+    <div class="nav-name"><img src="/assets/favicon.svg" alt="Jacopo Corrao" class="nav-favicon"></div>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
@@ -30,20 +30,23 @@ layout: home
     </a>
   </div>
 
-  <section id="about" class="about-scroll-section">
-    <div class="mesh-wrapper reveal-right">
-      <div class="drag-hint" id="dragHint">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 13"/></svg>
-        Drag ↔ to rotate
-      </div>
-        <model-viewer src="assets/models/avatar.glb" camera-controls touch-action="pan-y" disable-zoom disable-pan shadow-intensity="1" exposure="1" environment-image="neutral" aria-label="3D avatar of Jacopo Corrao"></model-viewer>
-    </div>
-    <div class="about-content reveal-left">
+  <section id="about" class="about-scroll-section reveal">
+    <div class="about-header">
       <h2>About Me</h2>
-      <p class="about-text">
-        My fascination with technology began in <strong>middle school</strong>. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.
-      </p>
-      <ul class="about-timeline">
+    </div>
+    <div class="about-inner">
+      <div class="mesh-wrapper">
+        <div class="drag-hint" id="dragHint">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 13"/></svg>
+          Drag ↔ to rotate
+        </div>
+        <model-viewer src="assets/models/avatar.glb" camera-controls touch-action="pan-y" disable-zoom disable-pan shadow-intensity="1" exposure="1" environment-image="neutral" aria-label="3D avatar of Jacopo Corrao"></model-viewer>
+      </div>
+      <div class="about-content">
+        <p class="about-text">
+          My fascination with technology began in <strong>middle school</strong>. What started as curiosity eventually became a professional pursuit, driving my academic and personal projects.
+        </p>
+        <ul class="about-timeline">
         <li>
           <div class="timeline-icon">📱</div>
           <div class="timeline-content">
@@ -73,6 +76,7 @@ layout: home
           </div>
         </li>
       </ul>
+      </div>
     </div>
   </section>
 
@@ -152,7 +156,7 @@ layout: home
       <div class="card project-card clickable" onclick="openModal(this)">
         <svg class="card-expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
         <div style="flex-grow: 1;">
-            <h3>Climate Monitoring System</h3>
+            <h3>Climate Monitoring</h3>
             <p>Climate Monitoring is a desktop application that allows you to manage and consult climate monitoring centres.</p>
         </div>
         <div class="card-footer">
@@ -241,6 +245,7 @@ layout: home
   </section>
 
   <section id="contact" class="reveal">
+    <h2>Contacts</h2>
     <div class="contact-section">
         <h2>Let's Connect</h2>
         <p class="contact-desc">
