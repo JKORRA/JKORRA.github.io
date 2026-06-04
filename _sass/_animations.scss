@@ -95,6 +95,23 @@ body.js-enabled .reveal.visible .featured-card:hover {
   transition-delay: 0s !important;
 }
 
+body.js-enabled .reveal .contact-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s var(--spring-easing),
+              transform 0.5s var(--spring-easing),
+              border-color 0.3s var(--smooth-easing),
+              background 0.3s var(--smooth-easing),
+              box-shadow 0.35s var(--spring-easing);
+}
+body.js-enabled .reveal.visible .contact-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+body.js-enabled .reveal.visible .contact-section:hover {
+  transition-delay: 0s !important;
+}
+
 body.js-enabled .reveal .grid .card {
   opacity: 0;
   transition: opacity 0.5s var(--spring-easing), transform 0.35s var(--spring-easing), border-color 0.3s var(--smooth-easing), background 0.3s var(--smooth-easing), box-shadow 0.35s var(--spring-easing);
