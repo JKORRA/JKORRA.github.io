@@ -18,17 +18,19 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   transition: transform 0.3s var(--spring-easing), background 0.3s var(--smooth-easing);
   margin-bottom: 20px;
+  position: relative;
 }
 
 .about-timeline li:hover {
-  transform: translateY(-3px);
+  transform: scale(1.02) translateY(-4px);
   background: rgba(44, 44, 46, 0.85);
+  z-index: 10;
 }
 
 .timeline-icon {
   font-size: 1.5rem;
   margin-right: 16px;
-  background: rgba(41, 151, 255, 0.1);
+  background: rgba(136, 12, 52, 0.1);
   min-width: 44px;
   height: 44px;
   display: flex;
@@ -72,31 +74,6 @@ model-viewer:focus {
   outline: none;
 }
 
-.drag-hint {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 99;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 30px;
-  background: var(--apple-card-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  pointer-events: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-.drag-hint svg {
-  color: var(--apple-blue);
-}
 
 .card {
   background: var(--apple-card-glass);
@@ -116,10 +93,11 @@ model-viewer:focus {
   cursor: pointer;
 }
 .card.clickable:hover {
-  transform: scale(1.02) translateY(-4px) !important;
+  transform: scale(1.02) translateY(-4px);
   border-color: rgba(255, 255, 255, 0.15);
   background: rgba(44, 44, 46, 0.85);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 .card h3 {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -152,17 +130,19 @@ model-viewer:focus {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 4px solid var(--apple-blue);
+  border-left: 4px solid transparent;
   border-radius: var(--card-radius);
   padding: 44px;
   margin-bottom: 40px;
-  transition: transform 0.35s var(--spring-easing), border-color 0.3s var(--smooth-easing);
+  transition: transform 0.35s var(--spring-easing), border-color 0.3s var(--smooth-easing), border-left-color 0.3s var(--smooth-easing);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 .featured-card:hover {
-  transform: scale(1.01) translateY(-2px) !important;
+  transform: scale(1.01) translateY(-2px);
   border-color: rgba(255, 255, 255, 0.15);
+  border-left-color: var(--apple-blue);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 
 .featured-header {
@@ -176,7 +156,7 @@ model-viewer:focus {
   margin: 0;
 }
 .featured-subtitle {
-  color: var(--apple-blue);
+  color: var(--apple-blue-text);
   font-size: 1.2rem;
   font-weight: normal;
   margin-top: 5px;
@@ -203,10 +183,10 @@ model-viewer:focus {
   font-size: 0.75rem;
   padding: 6px 12px;
   border-radius: 8px;
-  background: rgba(41, 151, 255, 0.1);
-  color: var(--apple-blue);
+  background: rgba(136, 12, 52, 0.1);
+  color: var(--apple-blue-text);
   font-weight: 600;
-  border: 1px solid rgba(41, 151, 255, 0.2);
+  border: 1px solid rgba(136, 12, 52, 0.2);
 }
 
 .card-expand-icon {
@@ -234,13 +214,13 @@ model-viewer:focus {
   color: #fff;
   padding: 8px 16px;
   border-radius: 20px;
-  background-color: rgba(0, 119, 181, 0.2);
-  border: 1px solid rgba(0, 119, 181, 0.3);
+  background-color: rgba(136, 12, 52, 0.2);
+  border: 1px solid rgba(136, 12, 52, 0.3);
   transition: all 0.25s var(--smooth-easing);
 }
 .btn-linkedin:hover {
-  background-color: rgba(0, 119, 181, 0.4);
-  border-color: #0077b5;
+  background-color: rgba(136, 12, 52, 0.4);
+  border-color: #880c34;
   text-decoration: none;
   transform: translateY(-2px);
 }
@@ -276,7 +256,7 @@ model-viewer:focus {
   font-size: 1rem;
   font-weight: 600;
   background: var(--apple-blue);
-  color: #000;
+  color: #fff;
   transition: transform 0.3s var(--spring-easing), background 0.2s var(--smooth-easing), box-shadow 0.3s var(--smooth-easing);
 }
 .btn-contact:hover {
@@ -284,7 +264,7 @@ model-viewer:focus {
   background-color: #fff;
   text-decoration: none;
   color: #000;
-  box-shadow: 0 8px 24px rgba(41, 151, 255, 0.3);
+  box-shadow: 0 8px 24px rgba(136, 12, 52, 0.3);
 }
 
 .social-links {
@@ -312,14 +292,14 @@ model-viewer:focus {
   text-decoration: none;
 }
 .social-link.linkedin:hover {
-  background: rgba(0, 119, 181, 0.3);
-  border-color: #0077b5;
-  box-shadow: 0 4px 16px rgba(0, 119, 181, 0.2);
+  background: rgba(136, 12, 52, 0.3);
+  border-color: #880c34;
+  box-shadow: 0 4px 16px rgba(136, 12, 52, 0.2);
 }
 .social-link.github:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+  background: rgba(136, 12, 52, 0.3);
+  border-color: #880c34;
+  box-shadow: 0 4px 16px rgba(136, 12, 52, 0.2);
 }
 
 footer {
@@ -404,7 +384,7 @@ footer {
 .modal-subtitle {
   font-size: 1.2rem;
   font-weight: normal;
-  color: var(--apple-blue);
+  color: var(--apple-blue-text);
   margin-bottom: 25px;
   display: block;
 }
@@ -422,7 +402,7 @@ footer {
   padding: 10px 24px;
   border-radius: 980px;
   background: var(--apple-blue);
-  color: #000;
+  color: #fff;
   font-weight: 600;
   margin-top: 10px;
   transition: transform 0.25s var(--spring-easing), background 0.2s var(--smooth-easing);
@@ -447,13 +427,14 @@ footer {
 }
 
 .education-card:hover {
-  transform: scale(1.02) translateY(-4px) !important;
+  transform: scale(1.02) translateY(-4px);
   border-color: rgba(255, 255, 255, 0.15);
   background: rgba(44, 44, 46, 0.85);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
 }
 .education-badge {
-  color: var(--apple-blue);
+  color: var(--apple-blue-text);
   font-weight: bold;
   font-size: 0.8rem;
   text-transform: uppercase;

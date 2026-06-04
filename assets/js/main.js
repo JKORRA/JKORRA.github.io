@@ -30,21 +30,21 @@ function openModal(cardElement) {
     }
 
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
 }
 
 function closeModal(event) {
     if (!modal) return;
     if (event.target === modal || event.target.classList.contains('modal-close') || event.target.closest('.modal-close')) {
         modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = '';
     }
 }
 
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape" && modal && modal.classList.contains('active')) {
         modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.documentElement.style.overflow = '';
     }
 });
 
@@ -73,16 +73,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     revealContent();
-
-    const dragHint = document.getElementById('dragHint');
-    if (dragHint && modelViewer) {
-        modelViewer.addEventListener('camera-change', (event) => {
-            if (event.detail.source === 'user-interaction') {
-                dragHint.style.opacity = '0';
-                dragHint.style.visibility = 'hidden';
-            }
-        });
-    }
 
     const textToType = "Hi, I'm Jacopo";
     const typingElement = document.getElementById("typing-text");

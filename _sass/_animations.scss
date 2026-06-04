@@ -45,7 +45,7 @@ body.js-enabled .no-animate * {
 
 body.js-enabled .about-scroll-section .about-header {
   opacity: 0;
-  transform: translateX(-60px);
+  transform: translateY(-60px);
   transition: opacity 0.5s var(--spring-easing), transform 0.5s var(--spring-easing);
 }
 body.js-enabled .about-scroll-section .about-content {
