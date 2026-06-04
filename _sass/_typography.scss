@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'SDForTimBurtonDemo';
   src: url('/assets/fonts/Sdfortimburtondemo-ALoW2.woff2') format('woff2'),
-       url('/assets/fonts/Sdfortimburtondemo-ALoW2.ttf') format('truetype');
+    url('/assets/fonts/Sdfortimburtondemo-ALoW2.ttf') format('truetype');
   font-display: swap;
   font-weight: normal;
   font-style: normal;
@@ -44,13 +44,12 @@ a {
   max-width: 700px;
   max-height: 700px;
   background: url('/assets/favicon.svg') no-repeat center/contain;
-  opacity: 0.08;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 0;
-  filter: brightness(0) invert(1);
 }
 
-.hero > * {
+.hero>* {
   position: relative;
   z-index: 1;
 }
@@ -115,16 +114,20 @@ h2 {
   .hero-greeting {
     font-size: clamp(2.5rem, 12vw, 4rem);
   }
+
   .cursor {
     height: clamp(2.5rem, 12vw, 4rem);
   }
+
   .hero-subline {
     font-size: 1.2rem;
   }
+
   .hero {
     min-height: 85dvh;
     padding: 30px 20px 40px;
   }
+
   h2 {
     font-size: 2.8rem;
     margin-top: 0;
