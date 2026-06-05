@@ -67,9 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     if (modelViewer) {
-        modelViewer.addEventListener('load', () => {
-            modelViewer.classList.add('is-loaded');
-        });
+        modelViewer.addEventListener('load', () => {});
     }
 
     revealContent();

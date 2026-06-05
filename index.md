@@ -36,7 +36,11 @@ layout: home
     </div>
     <div class="about-inner">
       <div class="mesh-wrapper">
-        <model-viewer src="assets/models/avatar.glb" camera-controls touch-action="pan-y" disable-zoom disable-pan shadow-intensity="1" exposure="1" aria-label="3D avatar of Jacopo Corrao"></model-viewer>
+        <model-viewer src="assets/models/avatar.glb" poster="assets/models/avatar-poster.webp" camera-controls touch-action="pan-y" disable-zoom disable-pan shadow-intensity="1" exposure="1" aria-label="3D avatar of Jacopo Corrao">
+          <div class="poster" slot="poster">
+            <img src="assets/models/avatar-poster.webp" alt="">
+          </div>
+        </model-viewer>
       </div>
       <div class="about-content">
         <p class="about-text">
