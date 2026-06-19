@@ -48,6 +48,10 @@ A comprehensive desktop management system designed for climate monitoring center
 My undergraduate internship project focused on running Large Language Models (LLMs) locally to create an agent capable of Function Calling without sending data to external cloud providers. Addressed key challenges in privacy, latency, and hardware constraints.
 * *Tech:* `GenAI` `Local Inference` `Function Calling`
 
+#### 🎙️ [Voice2Knowledge](https://github.com/JKORRA/Voice2Knowledge)
+A cross-platform desktop application that transcribes audio files into text using on-device AI. It uses optimized Whisper models and integrates a local LLM for post-transcription Q&A, ensuring your audio never leaves your computer.
+* *Tech:* `Speech-to-Text` `Local LLM` `FastAPI` `React`
+
 ---
 
 ### 📬 Let's Connect
